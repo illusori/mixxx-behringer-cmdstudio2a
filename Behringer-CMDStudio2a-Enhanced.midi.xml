@@ -1,0 +1,751 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MixxxControllerPreset schemaVersion="1" mixxxVersion="2.0.0+">
+    <info>
+        <name>Behringer CMD STUDIO 2a (Enhanced)</name>
+        <author>Sam Graham, based on Barney Garrett, LucidityCrash, and Rafael Ferran previous works</author>
+        <description>Controller mapping for the Behringer CMD STUDIO 2a. V 0.2 Created Nov 2020 for Mixxx 2.3.0</description>
+        <forums>https://www.mixxx.org/forums/viewtopic.php?f=7&amp;t=9359</forums>
+        <wiki>https://www.mixxx.org/wiki/doku.php/behringer_cmd_studio_2a</wiki>
+    </info>
+    <controller id="Studio">
+        <scriptfiles>
+            <file functionprefix="BehringerCMDStudio2a" filename="Behringer-CMDStudio2a-Enhanced-scripts.js"/>
+        </scriptfiles>
+        <controls>
+            <control>
+                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
+                <key>parameter3</key>
+                <description>High A</description>
+                <status>0xB0</status>
+                <midino>0x13</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
+                <key>parameter2</key>
+                <description>Mid A</description>
+                <status>0xB0</status>
+                <midino>0x14</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[EqualizerRack1_[Channel1]_Effect1]</group>
+                <key>parameter1</key>
+                <description>Low A</description>
+                <status>0xB0</status>
+                <midino>0x15</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
+                <key>parameter3</key>
+                <description>High B</description>
+                <status>0xB0</status>
+                <midino>0x43</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
+                <key>parameter2</key>
+                <description>Mid B</description>
+                <status>0xB0</status>
+                <midino>0x44</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[EqualizerRack1_[Channel2]_Effect1]</group>
+                <key>parameter1</key>
+                <description>Low B</description>
+                <status>0xB0</status>
+                <midino>0x45</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>headGain</key>
+                <description>Headphone Volume</description>
+                <status>0xB0</status>
+                <midino>0x21</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>pfl</key>
+                <description>Deck A PFL</description>
+                <status>0x90</status>
+                <midino>0x16</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>pfl</key>
+                <description>Deck B PFL</description>
+                <status>0x90</status>
+                <midino>0x46</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>volume</key>
+                <description>Deck A Fader.</description>
+                <status>0xB0</status>
+                <midino>0x18</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>volume</key>
+                <description>Deck B Fader.</description>
+                <status>0xB0</status>
+                <midino>0x48</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.wheelTouch</key>
+                <description>Jog A Touch</description>
+                <status>0x90</status>
+                <midino>0x03</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.wheelTouch</key>
+                <description>Jog A Touch release</description>
+                <status>0x80</status>
+                <midino>0x03</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.wheelTurn</key>
+                <description>Jog A</description>
+                <status>0xB0</status>
+                <midino>0x03</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.wheelTouch</key>
+                <description>Jog B Touch</description>
+                <status>0x90</status>
+                <midino>0x33</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.wheelTouch</key>
+                <description>Jog B Touch release</description>
+                <status>0x80</status>
+                <midino>0x33</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.wheelTurn</key>
+                <description>Jog B</description>
+                <status>0xB0</status>
+                <midino>0x33</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>BehringerCMDStudio2a.modeButtonPush</key>
+                <description>Mode button ON/OFF</description>
+                <status>0x90</status>
+                <midino>0x23</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>BehringerCMDStudio2a.vinylButtonPush</key>
+                <description>Vinyl button ON/OFF</description>
+                <status>0x90</status>
+                <midino>0x22</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Playlist]</group>
+                <key>BehringerCMDStudio2a.folderButtonPush</key>
+                <description>Folder button push</description>
+                <status>0x90</status>
+                <midino>0x25</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Playlist]</group>
+                <key>BehringerCMDStudio2a.fileButtonPush</key>
+                <description>File button push</description>
+                <status>0x90</status>
+                <midino>0x26</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Playlist]</group>
+                <key>BehringerCMDStudio2a.upButtonPush</key>
+                <description>Select Previous Track</description>
+                <status>0x90</status>
+                <midino>0x24</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Playlist]</group>
+                <key>BehringerCMDStudio2a.downButtonPush</key>
+                <description>Select Next Track</description>
+                <status>0x90</status>
+                <midino>0x27</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>LoadSelectedTrack</key>
+                <description>Load A</description>
+                <status>0x90</status>
+                <midino>0x17</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>LoadSelectedTrack</key>
+                <description>Load B</description>
+                <status>0x90</status>
+                <midino>0x47</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>crossfader</key>
+                <description>Crossfader</description>
+                <status>0xB0</status>
+                <midino>0x20</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>play</key>
+                <description>Play A</description>
+                <status>0x90</status>
+                <midino>0x02</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>play</key>
+                <description>Play B</description>
+                <status>0x90</status>
+                <midino>0x32</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>sync_enabled</key>
+                <description>Deck A SYNC</description>
+                <status>0x90</status>
+                <midino>0x04</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>sync_enabled</key>
+                <description>Deck A SYNC release</description>
+                <status>0x80</status>
+                <midino>0x04</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>sync_enabled</key>
+                <description>Deck B SYNC</description>
+                <status>0x90</status>
+                <midino>0x34</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>sync_enabled</key>
+                <description>Deck B SYNC release</description>
+                <status>0x80</status>
+                <midino>0x34</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.assignButtonsPush</key>
+                <description>Deck 1, Assign A button</description>
+                <status>0x90</status>
+                <midino>0x08</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>reloop_exit</key>
+                <description>Deck 1, Assign B button</description>
+                <status>0x90</status>
+                <midino>0x09</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.assignButtonsPush</key>
+                <description>Deck 2, Assign A button</description>
+                <status>0x90</status>
+                <midino>0x38</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>reloop_exit</key>
+                <description>Deck 2, Assign B button</description>
+                <status>0x90</status>
+                <midino>0x39</midino>
+                <options>
+                    <normal/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck A, hotcue button 1</description>
+                <status>0x90</status>
+                <midino>0x0A</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck A, hotcue button 2</description>
+                <status>0x90</status>
+                <midino>0x0B</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck A, hotcue button 3</description>
+                <status>0x90</status>
+                <midino>0x0C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck A, hotcue button 4</description>
+                <status>0x90</status>
+                <midino>0x0D</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck B, hotcue button 1</description>
+                <status>0x90</status>
+                <midino>0x3A</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck B, hotcue button 2</description>
+                <status>0x90</status>
+                <midino>0x3B</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck B, hotcue button 3</description>
+                <status>0x90</status>
+                <midino>0x3C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck B, hotcue button 4</description>
+                <status>0x90</status>
+                <midino>0x3D</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler1]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 1, Intro Start</description>
+                <status>0x90</status>
+                <midino>0x0E</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler2]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 1, Intro End</description>
+                <status>0x90</status>
+                <midino>0x0F</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler3]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 1, Outro Start</description>
+                <status>0x90</status>
+                <midino>0x11</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler4]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 1, Outro End</description>
+                <status>0x90</status>
+                <midino>0x12</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler5]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 2, Intro Start</description>
+                <status>0x90</status>
+                <midino>0x3E</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler6]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 2, Intro End</description>
+                <status>0x90</status>
+                <midino>0x3F</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler7]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 2, Outro Start</description>
+                <status>0x90</status>
+                <midino>0x41</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler8]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 2, Outro End</description>
+                <status>0x90</status>
+                <midino>0x42</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.plusButtonPush</key>
+                <description>Deck A, Plus button</description>
+                <status>0x90</status>
+                <midino>0x07</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.plusButtonPush</key>
+                <description>Deck A, Plus button release</description>
+                <status>0x80</status>
+                <midino>0x07</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.plusButtonPush</key>
+                <description>Deck B, Plus button</description>
+                <status>0x90</status>
+                <midino>0x37</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.plusButtonPush</key>
+                <description>Deck B, Plus button release</description>
+                <status>0x80</status>
+                <midino>0x37</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.minusButtonPush</key>
+                <description>Deck A, Minus button push</description>
+                <status>0x90</status>
+                <midino>0x06</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.minusButtonPush</key>
+                <description>Deck A, Minus button release</description>
+                <status>0x80</status>
+                <midino>0x06</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.minusButtonPush</key>
+                <description>Deck B, Minus button</description>
+                <status>0x90</status>
+                <midino>0x36</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.minusButtonPush</key>
+                <description>Deck B, Minus button release</description>
+                <status>0x80</status>
+                <midino>0x36</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>rate</key>
+                <description>Deck A Pitch Rotary.</description>
+                <status>0xB0</status>
+                <midino>0x05</midino>
+                <options>
+                    <rot64fast/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>rate</key>
+                <description>Deck B Pitch Rotary.</description>
+                <status>0xB0</status>
+                <midino>0x35</midino>
+                <options>
+                    <rot64fast/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.cue</key>
+                <description>Cue A</description>
+                <status>0x90</status>
+                <midino>0x01</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.cue</key>
+                <description>Cue A release</description>
+                <status>0x80</status>
+                <midino>0x01</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.cue</key>
+                <description>Cue B</description>
+                <status>0x90</status>
+                <midino>0x31</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.cue</key>
+                <description>Cue B release</description>
+                <status>0x80</status>
+                <midino>0x31</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+        </controls>
+        <outputs>
+            <output>
+                <group>[Channel1]</group>
+                <key>play_indicator</key>
+                <description>Deck A Play Button</description>
+                <status>0x90</status>
+                <midino>0x02</midino>
+                <on>0x01</on>
+                <minimum>0.1</minimum>
+            </output>
+            <output>
+                <group>[Channel2]</group>
+                <key>play_indicator</key>
+                <description>Deck B Play Button</description>
+                <status>0x90</status>
+                <midino>0x32</midino>
+                <on>0x01</on>
+                <minimum>0.1</minimum>
+            </output>
+            <output>
+                <group>[Channel1]</group>
+                <key>cue_indicator</key>
+                <description>Deck A Cue Button</description>
+                <status>0x90</status>
+                <midino>0x01</midino>
+                <on>0x01</on>
+                <minimum>0.1</minimum>
+            </output>
+            <output>
+                <group>[Channel2]</group>
+                <key>cue_indicator</key>
+                <description>Deck B Cue Button</description>
+                <status>0x90</status>
+                <midino>0x31</midino>
+                <on>0x01</on>
+                <minimum>0.1</minimum>
+            </output>
+            <output>
+                <group>[Channel1]</group>
+                <key>pfl</key>
+                <description>Deck A PFL Button</description>
+                <status>0x90</status>
+                <midino>0x16</midino>
+                <on>0x01</on>
+                <minimum>0.1</minimum>
+            </output>
+            <output>
+                <group>[Channel2]</group>
+                <key>pfl</key>
+                <description>Deck B PFL button</description>
+                <status>0x90</status>
+                <midino>0x46</midino>
+                <on>0x01</on>
+                <minimum>0.1</minimum>
+            </output>
+            <output>
+                <group>[Channel1]</group>
+                <key>loop_enabled</key>
+                <description>Deck A Loop enabled indicator</description>
+                <status>0x90</status>
+                <midino>0x09</midino>
+                <on>0x01</on>
+                <minimum>0.1</minimum>
+            </output>
+            <output>
+                <group>[Channel2]</group>
+                <key>loop_enabled</key>
+                <description>Deck B Loop enabled indicator</description>
+                <status>0x90</status>
+                <midino>0x39</midino>
+                <on>0x01</on>
+                <minimum>0.1</minimum>
+            </output>
+        </outputs>
+    </controller>
+</MixxxControllerPreset>
