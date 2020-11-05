@@ -333,7 +333,7 @@ BehringerCMDStudio2a.hotCueButtons = function (channel, control, value, status, 
     if (value === 127) { // Button pushed
         var deck = script.deckFromGroup(group);
         // Hotcue buttons on left deck go from 0x0A to 0x0D, on right deck from 0x3A to 0x3D.
-        var button = control - (deck === 1 ? 0x09 : 0x30);
+        var button = control - (deck === 1 ? 0x09 : 0x39);
 
         if (this.editMode[deck - 1] === this.editModes.loop) {
             // Edit mode LOOP: beatloops 1/4 to 1
