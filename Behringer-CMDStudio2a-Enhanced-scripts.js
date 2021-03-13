@@ -269,62 +269,70 @@ BehringerCMDStudio2a.downButtonPush = function (channel, control, value, status,
 // Speed/Loop controls
 // Minus buttons
 BehringerCMDStudio2a.minusButtonPush = function (channel, control, value, status, group) {
-        var canal = script.deckFromGroup(group)-1;
+    var canal = script.deckFromGroup(group)-1;
 
-        if (this.editMode[canal] === this.editModes.loop) {
-                // loop mode
-                if (value === 127) {
-                        //Button push
-                        engine.setValue(group,"loop_in",1);
-                }
+    BehringerCMDStudio2a.minusPlusPushed[0][canal] = (value === 127);
+
+    if (this.editMode[canal] === this.editModes.loop) {
+        // loop mode
+        if (value === 127) {
+            //Button push
+            engine.setValue(group,"loop_in",1);
         } else {
-                // Speed (tempo) mode
-                if (value === 127) {
-                        // Button push
-                        BehringerCMDStudio2a.minusPlusPushed[0][canal] = true;
-                        if (BehringerCMDStudio2a.minusPlusPushed[1][canal]) {
-                                // Plus button is pushed too
-                                engine.setValue(group,"rate",0); // Reset slider
-                        } else {
-                                engine.setValue(group,"rate_temp_down",1);
-                        }
-                } else {
-                        // Button release
-                        BehringerCMDStudio2a.minusPlusPushed[0][canal] = false;
-                        engine.setValue(group,"rate_temp_down",0);
-                }
+            // Button release
+            engine.setValue(group,"loop_in",0);
         }
+    } else {
+        // Speed (tempo) mode
+        if (value === 127) {
+            // Button push
+            if (BehringerCMDStudio2a.minusPlusPushed[1][canal]) {
+                // Plus button is pushed too
+                engine.setValue(group,"rate",0); // Reset slider
+            } else {
+                engine.setValue(group,"rate_temp_down",1);
+            }
+        } else {
+            // Button release
+            BehringerCMDStudio2a.minusPlusPushed[0][canal] = false;
+            engine.setValue(group,"rate_temp_down",0);
+        }
+    }
 }
 
 
 
 // Plus buttons
 BehringerCMDStudio2a.plusButtonPush = function (channel, control, value, status, group) {
-        var canal = script.deckFromGroup(group)-1;
+    var canal = script.deckFromGroup(group)-1;
 
-        if (this.editMode[canal] === this.editModes.loop) {
-                // loop mode
-                if (value === 127) {
-                        //Button push
-                        engine.setValue(group,"loop_out",1);
-                }
+    BehringerCMDStudio2a.minusPlusPushed[1][canal] = (value === 127);
+
+    if (this.editMode[canal] === this.editModes.loop) {
+        // loop mode
+        if (value === 127) {
+            //Button push
+            engine.setValue(group,"loop_out",1);
         } else {
-                // Speed (tempo) mode
-                if (value === 127) {
-                        // Button push
-                        BehringerCMDStudio2a.minusPlusPushed[1][canal] = true;
-                        if (BehringerCMDStudio2a.minusPlusPushed[0][canal]) {
-                                // Plus button is pushed too
-                                engine.setValue(group,"rate",0); // Reset slider
-                        } else {
-                                engine.setValue(group,"rate_temp_up",1);
-                        }
-                } else {
-                        // Button release
-                        BehringerCMDStudio2a.minusPlusPushed[1][canal] = false;
-                        engine.setValue(group,"rate_temp_up",0);
-                }
+            // Button release
+            engine.setValue(group,"loop_out",0);
         }
+    } else {
+        // Speed (tempo) mode
+        if (value === 127) {
+            // Button push
+            if (BehringerCMDStudio2a.minusPlusPushed[0][canal]) {
+                // Plus button is pushed too
+                engine.setValue(group,"rate",0); // Reset slider
+            } else {
+                engine.setValue(group,"rate_temp_up",1);
+            }
+        } else {
+            // Button release
+            BehringerCMDStudio2a.minusPlusPushed[1][canal] = false;
+            engine.setValue(group,"rate_temp_up",0);
+        }
+    }
 }
 
 

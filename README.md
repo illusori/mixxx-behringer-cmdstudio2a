@@ -10,6 +10,10 @@ Based off https://github.com/mixxxdj/mixxx/wiki/behringer_cmd_studio_2a, refer t
 
 ## Additional changes
 
+### Headphone Volume is Headphone Mix
+
+Personal preference, I use a fader on my headphones, so I find it more useful to have the Headphone Volume knob control the Headphone Mix instead. You can set this back in the bindings.
+
 ### Assign A button
 
 The *Assign A* button is now an "edit mode" switch that cycles between three editing modes:
