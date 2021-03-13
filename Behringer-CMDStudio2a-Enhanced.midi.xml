@@ -246,22 +246,26 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>LoadSelectedTrack</key>
+                <key>BehringerCMDStudio2a.loadDeck</key>
+                <!--<key>LoadSelectedTrack</key>-->
                 <description>Load A</description>
                 <status>0x90</status>
                 <midino>0x17</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
+                    <!--<normal/>-->
                 </options>
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>LoadSelectedTrack</key>
+                <key>BehringerCMDStudio2a.loadDeck</key>
+                <!--<key>LoadSelectedTrack</key>-->
                 <description>Load B</description>
                 <status>0x90</status>
                 <midino>0x47</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
+                    <!--<normal/>-->
                 </options>
             </control>
             <control>

@@ -273,29 +273,38 @@ BehringerCMDStudio2a.minusButtonPush = function (channel, control, value, status
 
     BehringerCMDStudio2a.minusPlusPushed[0][canal] = (value === 127);
 
-    if (this.editMode[canal] === this.editModes.loop) {
-        // loop mode
-        if (value === 127) {
-            //Button push
-            engine.setValue(group,"loop_in",1);
-        } else {
-            // Button release
-            engine.setValue(group,"loop_in",0);
-        }
-    } else {
-        // Speed (tempo) mode
-        if (value === 127) {
-            // Button push
-            if (BehringerCMDStudio2a.minusPlusPushed[1][canal]) {
-                // Plus button is pushed too
-                engine.setValue(group,"rate",0); // Reset slider
+    if (!this.modeShifted()) {
+        // Not mode Shift
+        if (this.editMode[canal] === this.editModes.loop) {
+            // loop mode
+            if (value === 127) {
+                //Button push
+                engine.setValue(group,"loop_in",1);
             } else {
-                engine.setValue(group,"rate_temp_down",1);
+                // Button release
+                engine.setValue(group,"loop_in",0);
             }
         } else {
-            // Button release
-            BehringerCMDStudio2a.minusPlusPushed[0][canal] = false;
-            engine.setValue(group,"rate_temp_down",0);
+            // Speed (tempo) mode
+            if (value === 127) {
+                // Button push
+                if (BehringerCMDStudio2a.minusPlusPushed[1][canal]) {
+                    // Plus button is pushed too
+                    engine.setValue(group,"rate",0); // Reset slider
+                } else {
+                    engine.setValue(group,"rate_temp_down",1);
+                }
+            } else {
+                // Button release
+                BehringerCMDStudio2a.minusPlusPushed[0][canal] = false;
+                engine.setValue(group,"rate_temp_down",0);
+            }
+        }
+    } else {
+        // Mode Shifted
+        // Beatjump backwards
+        if (value === 127) {
+            engine.setValue(group,"beatjump_backward", 1);
         }
     }
 }
@@ -308,29 +317,38 @@ BehringerCMDStudio2a.plusButtonPush = function (channel, control, value, status,
 
     BehringerCMDStudio2a.minusPlusPushed[1][canal] = (value === 127);
 
-    if (this.editMode[canal] === this.editModes.loop) {
-        // loop mode
-        if (value === 127) {
-            //Button push
-            engine.setValue(group,"loop_out",1);
-        } else {
-            // Button release
-            engine.setValue(group,"loop_out",0);
-        }
-    } else {
-        // Speed (tempo) mode
-        if (value === 127) {
-            // Button push
-            if (BehringerCMDStudio2a.minusPlusPushed[0][canal]) {
-                // Plus button is pushed too
-                engine.setValue(group,"rate",0); // Reset slider
+    if (!this.modeShifted()) {
+        // Not mode Shift
+        if (this.editMode[canal] === this.editModes.loop) {
+            // loop mode
+            if (value === 127) {
+                //Button push
+                engine.setValue(group,"loop_out",1);
             } else {
-                engine.setValue(group,"rate_temp_up",1);
+                // Button release
+                engine.setValue(group,"loop_out",0);
             }
         } else {
-            // Button release
-            BehringerCMDStudio2a.minusPlusPushed[1][canal] = false;
-            engine.setValue(group,"rate_temp_up",0);
+            // Speed (tempo) mode
+            if (value === 127) {
+                // Button push
+                if (BehringerCMDStudio2a.minusPlusPushed[0][canal]) {
+                    // Plus button is pushed too
+                    engine.setValue(group,"rate",0); // Reset slider
+                } else {
+                    engine.setValue(group,"rate_temp_up",1);
+                }
+            } else {
+                // Button release
+                BehringerCMDStudio2a.minusPlusPushed[1][canal] = false;
+                engine.setValue(group,"rate_temp_up",0);
+            }
+        }
+    } else {
+        // Mode Shifted
+        // Beatjump backwards
+        if (value === 127) {
+            engine.setValue(group,"beatjump_forward", 1);
         }
     }
 }
@@ -449,6 +467,20 @@ BehringerCMDStudio2a.wheelTurn = function (channel, control, value, status, grou
         }
     } else {
             engine.setValue(group, "jog", newValue); // Jog.
+    }
+}
+
+
+// Load Deck buttons. Loads to deck, or if mode-shifted clones other deck.
+BehringerCMDStudio2a.loadDeck = function (channel, control, value, status, group) {
+    if (value === 127) { // Button pushed
+        var deck = script.deckFromGroup(group);
+        if (!this.modeShifted()) {
+            engine.setValue(group, "LoadSelectedTrack", 1);
+        } else {
+            engine.setValue(group, "CloneFromDeck", 0); // Clone the other deck.
+            //engine.setValue(group, "CloneFromDeck", deck == 1 ? 2 : 1); // Clone the other deck.
+        }
     }
 }
 

@@ -14,6 +14,14 @@ Based off https://github.com/mixxxdj/mixxx/wiki/behringer_cmd_studio_2a, refer t
 
 Personal preference, I use a fader on my headphones, so I find it more useful to have the Headphone Volume knob control the Headphone Mix instead. You can set this back in the bindings.
 
+### Deck Cloning
+
+Load A/Load B work as normal without the mode-shift key active. If you have mode-shift or mode-lock enabled then Load A/Load B will clone the playing track into deck A or B. (Deck cloning loads the cloned deck and sets it playing from the same point/bpm/etc.)
+
+### Beat Jumping
+
+With mode-shift or mode-lock active the plus/minus buttons will beatjump forwards or backwards by the beatjump amount. This takes priority over other uses of the plus/minus buttons.
+
 ### Assign A button
 
 The *Assign A* button is now an "edit mode" switch that cycles between three editing modes:
@@ -25,7 +33,7 @@ The *Assign A* button is now an "edit mode" switch that cycles between three edi
 #### Loop editing mode
 
 * Assign B toggles loop enabled. (This applies to all modes, not just loop editing mode.)
-* Plus/minus control loop in/loop out markers. This seems a little buggy to me in 2.3.0, still needs some work.
+* Plus/minus control loop in/loop out markers.
 * The hotcue buttons and sample buttons become beatloop buttons. From the top: fractional beats on the left from 1/8 to 1, and multiple-beat loops on the right from 2 to 16.
 
 #### Intro-Outro editing mode
