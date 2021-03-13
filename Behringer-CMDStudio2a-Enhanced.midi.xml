@@ -13,6 +13,18 @@
         </scriptfiles>
         <controls>
             <control>
+                <group>[Master]</group>
+                <!--<key>headGain</key>
+                <description>Headphone Volume</description>-->
+                <key>headMix</key>
+                <description>Headphone Mix</description>
+                <status>0xB0</status>
+                <midino>0x21</midino>
+                <options>
+                    <soft-takeover/>
+                </options>
+            </control>
+            <control>
                 <group>[EqualizerRack1_[Channel1]_Effect1]</group>
                 <key>parameter3</key>
                 <description>High A</description>
@@ -68,16 +80,6 @@
                 <description>Low B</description>
                 <status>0xB0</status>
                 <midino>0x45</midino>
-                <options>
-                    <soft-takeover/>
-                </options>
-            </control>
-            <control>
-                <group>[Master]</group>
-                <key>headGain</key>
-                <description>Headphone Volume</description>
-                <status>0xB0</status>
-                <midino>0x21</midino>
                 <options>
                     <soft-takeover/>
                 </options>
