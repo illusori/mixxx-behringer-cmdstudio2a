@@ -10,6 +10,12 @@ Based off https://github.com/mixxxdj/mixxx/wiki/behringer_cmd_studio_2a, refer t
 
 ## Additional changes
 
+### Jog Wheel sensitivity
+
+In vinyl mode the top of the jog wheels enable scratching, and when MODE SHIFTED they'll function at 10x sensitivity to let you scrub through a track quickly.
+
+You can also edit the jog wheel sensitivity in the top of the `Behringer-CMDStudio2a-Enhanced-scripts.js` file if you need to.
+
 ### Headphone Volume is Headphone Mix
 
 Personal preference, I use a fader on my headphones, so I find it more useful to have the Headphone Volume knob control the Headphone Mix instead. You can set this back in the bindings.

@@ -18,10 +18,24 @@
 // Master function definition.
 function BehringerCMDStudio2a() {}
 
+// EDIT mode state (Assign A button): OFF / MODE1 (steady) / MODE2 (blink)
+BehringerCMDStudio2a.editModes = { off: 0, mode1: 1, mode2: 2, disabled: -1 };
+
+// ***************************** User configurable bits ***********************
+
+// Sets the jogwheels sensitivity. 1 is default, 2 is twice as sensitive, 0.5 is half as sensitive.
+// First entry is default mode, second is shifted mode.
+BehringerCMDStudio2a.scratchSensitivity = [1.0, 10.0];
+
+// Semantic mode names.
+// Change the value on these to soft-map to mode1/mode2 and the button will change behaviour.
+// By default MODE1 is edit LOOP mode, and MODE2 is edit INTROOUTRO mode.
+BehringerCMDStudio2a.editModes.loop       = BehringerCMDStudio2a.editModes.mode1;
+BehringerCMDStudio2a.editModes.introoutro = BehringerCMDStudio2a.editModes.mode2;
 
 // ***************************** Global Vars **********************************
 
-// Vinyl button, ON -> scracth mode
+// Vinyl button, ON -> scratch mode
 BehringerCMDStudio2a.vinylButton = false;
 
 BehringerCMDStudio2a.minusPlusPushed = [[false,false],[false,false]]; // Status: pushed/not pushed of minus and plus buttons.
@@ -34,18 +48,6 @@ BehringerCMDStudio2a.fileButton = false;
 BehringerCMDStudio2a.modeShift = false;
 BehringerCMDStudio2a.modeLock = false;
 
-// EDIT mode state (Assign A button): OFF / MODE1 (steady) / MODE2 (blink)
-// By default MODE1 is edit LOOP mode, and MODE2 is edit INTROOUTRO mode.
-BehringerCMDStudio2a.editModes = {
-  off: 0,
-  mode1: 1,
-  mode2: 2,
-
-  // Semantic mode names.
-  // Change the value on these to soft-map to mode1/mode2 and the button will change behaviour.
-  loop: 1,
-  introoutro: 2,
-};
 BehringerCMDStudio2a.editMode = [BehringerCMDStudio2a.editModes.off, BehringerCMDStudio2a.editModes.off];
 
 // This is an odd order because they're aligned vertically not in the button order.
@@ -459,14 +461,11 @@ BehringerCMDStudio2a.wheelTurn = function (channel, control, value, status, grou
     var deck = script.deckFromGroup(group);
     var deck_array = deck-1;
     var newValue = value-64;
-    if (true){
-        if (engine.isScratching(deck)){
-            engine.scratchTick(deck,newValue);  // Scratch!
-        } else {
-            engine.setValue(group, "jog", newValue); // Jog.
-        }
+    if (engine.isScratching(deck)) {
+        newValue *= BehringerCMDStudio2a.scratchSensitivity[this.modeShift ? 1 : 0];
+        engine.scratchTick(deck, newValue);  // Scratch!
     } else {
-            engine.setValue(group, "jog", newValue); // Jog.
+        engine.setValue(group, "jog", newValue); // Jog.
     }
 }
 
