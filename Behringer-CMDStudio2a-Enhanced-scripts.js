@@ -225,14 +225,14 @@ BehringerCMDStudio2a.modeButtonPush = function (channel, control, value, status,
 
 //Folder button behaviour
 BehringerCMDStudio2a.folderButtonPush = function (channel, control, value, status, group) {
-        if (BehringerCMDStudio2a.folderButton){
-                engine.setValue(group, "ToggleSelectedSidebarItem",1); // expand/collapse view
+        if (BehringerCMDStudio2a.folderButton) {
+            engine.setValue(group, "ToggleSelectedSidebarItem",1); // expand/collapse view
         } else {
-                BehringerCMDStudio2a.folderButton = true;
-                midi.sendShortMsg(0x90, 0x25, this.colours.on); // Folder button led ON
-                BehringerCMDStudio2a.fileButton = false;
-                midi.sendShortMsg(0x90, 0x26, this.colours.off); // File button led OFF
-                // focus on folder view
+            BehringerCMDStudio2a.folderButton = true;
+            midi.sendShortMsg(0x90, 0x25, this.colours.on); // Folder button led ON
+            BehringerCMDStudio2a.fileButton = false;
+            midi.sendShortMsg(0x90, 0x26, this.colours.off); // File button led OFF
+            // focus on folder view
         }
 }
 
@@ -240,13 +240,27 @@ BehringerCMDStudio2a.folderButtonPush = function (channel, control, value, statu
 
 //File button behaviour
 BehringerCMDStudio2a.fileButtonPush = function (channel, control, value, status, group) {
-        if (BehringerCMDStudio2a.fileButton){ // Page Down files
+        if (BehringerCMDStudio2a.fileButton) {
+            if (this.modeShifted()) {
+                // Shift: load to preview or stop previewing.
+                if (engine.getValue('[PreviewDeck1]', "play")) {
+                    engine.setValue('[PreviewDeck1]', "stop", 1);
+                } else {
+                    engine.setValue('[PreviewDeck1]', "LoadSelectedTrackAndPlay", 1);
+                }
+            } else {
+                // Load to first stopped deck.
+                engine.setValue(group, "LoadSelectedIntoFirstStopped", 1);
+            }
         } else {
-                BehringerCMDStudio2a.folderButton = false;
-                midi.sendShortMsg(0x90, 0x25, this.colours.off); // Folder button led OFF
-                BehringerCMDStudio2a.fileButton = true;
-                midi.sendShortMsg(0x90, 0x26, this.colours.on); // File button led ON
-                // focus on file view
+            BehringerCMDStudio2a.folderButton = false;
+            midi.sendShortMsg(0x90, 0x25, this.colours.off); // Folder button led OFF
+            BehringerCMDStudio2a.fileButton = true;
+            midi.sendShortMsg(0x90, 0x26, this.colours.on); // File button led ON
+            // focus on file view
+            // Move cursor down one to highlight top track, otherwise there's no
+            // visible effect within Mixxx that we've changed view.
+            engine.setValue(group, "SelectNextTrack", 1);
         }
 }
 
@@ -255,13 +269,13 @@ BehringerCMDStudio2a.fileButtonPush = function (channel, control, value, status,
 // Up button behaviour (folder/file depending)
 BehringerCMDStudio2a.upButtonPush = function (channel, control, value, status, group) {
     if (BehringerCMDStudio2a.folderButton) { // Folder mode
-        engine.setValue(group,"SelectPrevPlaylist",1);
+        engine.setValue(group, "SelectPrevPlaylist", 1);
     } else { // File mode
         // Act as though mode lock is ON for convenience
         if (!this.modeShift) { // Mode shift is OFF
-            engine.setValue(group,"SelectPrevTrack",1); // Up one by one
+            engine.setValue(group, "SelectPrevTrack", 1); // Up one by one
         } else { // Mode shift is ON
-            engine.setValue(group,"SelectTrackKnob",-10); // Up ten by ten
+            engine.setValue(group, "SelectTrackKnob", -10); // Up ten by ten
         }
     }
 }
@@ -271,13 +285,13 @@ BehringerCMDStudio2a.upButtonPush = function (channel, control, value, status, g
 // Down button behaviour (folder/file depending)
 BehringerCMDStudio2a.downButtonPush = function (channel, control, value, status, group) {
     if (BehringerCMDStudio2a.folderButton) { // Folder mode
-        engine.setValue(group,"SelectNextPlaylist",1);
+        engine.setValue(group, "SelectNextPlaylist", 1);
     } else { // File mode
         // Act as though mode lock is ON for convenience
         if (!this.modeShift) { // Mode shift is OFF
-            engine.setValue(group,"SelectNextTrack",1); // Down one by one
+            engine.setValue(group, "SelectNextTrack", 1); // Down one by one
         } else { // Mode shift is ON
-            engine.setValue(group,"SelectTrackKnob",10); // Down ten by ten
+            engine.setValue(group, "SelectTrackKnob", 10); // Down ten by ten
         }
     }
 }

@@ -30,6 +30,14 @@ Personal preference, I use a fader on my headphones, so I find it more useful to
 
 Load A/Load B work as normal without the mode-shift key active. If you have mode-shift or mode-lock enabled then Load A/Load B will clone the playing track into deck A or B. (Deck cloning loads the cloned deck and sets it playing from the same point/bpm/etc.)
 
+### Load To Inactive Deck
+
+Pressing the File button with a track selected will load it into the first available stopped deck.
+
+### Track Previewing
+
+Pressing the File button while mode-shift is active will start previewing the currently selected track, or stop the current preview from playing.
+
 ### Beat Jumping
 
 With mode-shift or mode-lock active the plus/minus buttons will beatjump forwards or backwards by the beatjump amount. This takes priority over other uses of the plus/minus buttons.
