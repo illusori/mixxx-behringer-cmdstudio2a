@@ -10,6 +10,12 @@ Based off https://github.com/mixxxdj/mixxx/wiki/behringer_cmd_studio_2a, refer t
 
 ## Additional changes
 
+### Shift Mode configuration
+
+The MODE button has changed from the orginal mapping to enable a more traditional "shift is only active while you hold the MODE key down" behaviour.
+
+If you wish it to return to the old default where the MODE button uses "press once to enable mode-shift for the next command, or press twice to enable mode-shift lock", you can edit the `Behringer-CMDStudio2a-Enhanced-scripts.js` file and set the `holdToModeShift` value near the top to `true`.
+
 ### Jog Wheel sensitivity
 
 In vinyl mode the top of the jog wheels enable scratching, and when MODE SHIFTED they'll function at 10x sensitivity to let you scrub through a track quickly.

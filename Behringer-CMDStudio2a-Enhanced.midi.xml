@@ -187,8 +187,18 @@
             <control>
                 <group>[Master]</group>
                 <key>BehringerCMDStudio2a.modeButtonPush</key>
-                <description>Mode button ON/OFF</description>
+                <description>Mode button press</description>
                 <status>0x90</status>
+                <midino>0x23</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Master]</group>
+                <key>BehringerCMDStudio2a.modeButtonPush</key>
+                <description>Mode button release</description>
+                <status>0x80</status>
                 <midino>0x23</midino>
                 <options>
                     <script-binding/>

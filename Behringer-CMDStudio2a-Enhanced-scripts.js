@@ -23,6 +23,11 @@ BehringerCMDStudio2a.editModes = { off: 0, mode1: 1, mode2: 2, disabled: -1 };
 
 // ***************************** User configurable bits ***********************
 
+// Set to true to turn the MODE shift button into one that's only active while held.
+// Set as false for layer cycle behaviour of press to cycle between [OFF, ON-ONCE, LOCKED-ON]
+BehringerCMDStudio2a.holdToModeShift = true;
+
+
 // Sets the jogwheels sensitivity. 1 is default, 2 is twice as sensitive, 0.5 is half as sensitive.
 // First entry is default mode, second is shifted mode.
 BehringerCMDStudio2a.scratchSensitivity = [1.0, 10.0];
@@ -134,6 +139,9 @@ BehringerCMDStudio2a.setModeLock = function (lock) {
 }
 
 BehringerCMDStudio2a.modeShifted = function () {
+    if (this.holdToModeShift) {
+        return this.modeShift;
+    }
     if (!this.modeShift) {
         return false;
     }
@@ -195,13 +203,21 @@ BehringerCMDStudio2a.vinylButtonPush = function (channel, control, value, status
 
 // Mode button ON/OFF
 BehringerCMDStudio2a.modeButtonPush = function (channel, control, value, status, group) {
+    // FIXME
+    //print('modeButtonPush: ch ' + channel + ', con ' + control + ', val ' + value + ', status ' + status + ', group ' + group);
     if (value === 127 ) { // Button pushed
-        if (this.modeLock) {
+        if (this.holdToModeShift) {
+            this.setModeShift(true);
+        } else if (this.modeLock) {
             this.setModeShift(false); // locked -> reset to unshifted
         } else if (this.modeShift) {
             this.setModeLock(true); // shifted -> locked
         } else {
             this.setModeShift(true); // unshifted -> shifted
+        }
+    } else { // Button release
+        if (this.holdToModeShift) {
+            this.setModeShift(false);
         }
     }
 }
@@ -241,10 +257,10 @@ BehringerCMDStudio2a.upButtonPush = function (channel, control, value, status, g
     if (BehringerCMDStudio2a.folderButton) { // Folder mode
         engine.setValue(group,"SelectPrevPlaylist",1);
     } else { // File mode
-        if (!BehringerCMDStudio2a.modeShift) { // Mode shift is OFF
+        // Act as though mode lock is ON for convenience
+        if (!this.modeShift) { // Mode shift is OFF
             engine.setValue(group,"SelectPrevTrack",1); // Up one by one
         } else { // Mode shift is ON
-            this.setModeLock(true); // Auto mode lock ON for convenience
             engine.setValue(group,"SelectTrackKnob",-10); // Up ten by ten
         }
     }
@@ -257,10 +273,10 @@ BehringerCMDStudio2a.downButtonPush = function (channel, control, value, status,
     if (BehringerCMDStudio2a.folderButton) { // Folder mode
         engine.setValue(group,"SelectNextPlaylist",1);
     } else { // File mode
-        if (!BehringerCMDStudio2a.modeShift) { // Mode shift is OFF
+        // Act as though mode lock is ON for convenience
+        if (!this.modeShift) { // Mode shift is OFF
             engine.setValue(group,"SelectNextTrack",1); // Down one by one
         } else { // Mode shift is ON
-            this.setModeLock(true); // Auto mode lock ON for convenience
             engine.setValue(group,"SelectTrackKnob",10); // Down ten by ten
         }
     }
