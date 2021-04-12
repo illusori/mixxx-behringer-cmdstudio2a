@@ -9,6 +9,7 @@
     </info>
     <controller id="Studio">
         <scriptfiles>
+            <file filename="Behringer-CMDStudio2a-Enhanced-preferences.js"/>
             <file functionprefix="BehringerCMDStudio2a" filename="Behringer-CMDStudio2a-Enhanced-scripts.js"/>
         </scriptfiles>
         <controls>

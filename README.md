@@ -10,21 +10,31 @@ Based off https://github.com/mixxxdj/mixxx/wiki/behringer_cmd_studio_2a, refer t
 
 ## Additional changes
 
+### Preferences File
+
+Preferences have been split into a separate file `Behringer-CMDStudio2a-Enhanced-preferences.js`. If you take a copy of this file and install it to `~/.mixxx/controllers` then any edits you make will persist through version upgrades. This avoids you needing to edit the file every time the controller defintion is updated.
+
+As new options are added you'll have sensible defaults, but if you want to change an option added since you copied the file, you'll either need to copy the option in yourself, or take a fresh copy and make your changes by hand again.
+
 ### Shift Mode configuration
 
 The MODE button has changed from the orginal mapping to enable a more traditional "shift is only active while you hold the MODE key down" behaviour.
 
-If you wish it to return to the old default where the MODE button uses "press once to enable mode-shift for the next command, or press twice to enable mode-shift lock", you can edit the `Behringer-CMDStudio2a-Enhanced-scripts.js` file and set the `holdToModeShift` value near the top to `true`.
+If you wish it to return to the old default where the MODE button uses "press once to enable mode-shift for the next command, or press twice to enable mode-shift lock", you can set `holdToModeShift` value in the preferences file to `true`.
 
 ### Jog Wheel sensitivity
 
 In vinyl mode the top of the jog wheels enable scratching, and when MODE SHIFTED they'll function at 10x sensitivity to let you scrub through a track quickly.
 
-You can also edit the jog wheel sensitivity in the top of the `Behringer-CMDStudio2a-Enhanced-scripts.js` file if you need to.
+You can also edit the jog wheel sensitivity in the preferences file if you need to.
 
 ### Headphone Volume is Headphone Mix
 
-Personal preference, I use a fader on my headphones, so I find it more useful to have the Headphone Volume knob control the Headphone Mix instead. You can set this back in the bindings.
+Personal preference, I use a fader on my headphones, so I find it more useful to have the Headphone Volume knob control the Headphone Mix instead. You can set this back in the bindings. As of yet you can't set this within the preferences file.
+
+### Vinyl Mode
+
+By default the decks now start in vinyl mode, if you'd rather start in CD mode like the original controller mapping you can change the `startInVinylMode` option in the preferences file to `false`.
 
 ### Deck Cloning
 
@@ -49,6 +59,8 @@ The *Assign A* button is now an "edit mode" switch that cycles between three edi
 * First is "off" with red LED, controller functions are unchanged.
 * Second is "loop" editing mode with blue LED.
 * This is "intro-outro" editing mode with flashing red/blue LED.
+
+If you want to change the order of the "edit modes", you can do this in the `editModes` section of the preferences file. You can also customize the `startInEditMode` to pick which edit mode to start in when you fire up Mixxx.
 
 #### Loop editing mode
 

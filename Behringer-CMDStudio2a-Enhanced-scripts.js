@@ -21,22 +21,61 @@ function BehringerCMDStudio2a() {}
 // EDIT mode state (Assign A button): OFF / MODE1 (steady) / MODE2 (blink)
 BehringerCMDStudio2a.editModes = { off: 0, mode1: 1, mode2: 2, disabled: -1 };
 
-// ***************************** User configurable bits ***********************
+// ***************************** Preferences ***********************
 
-// Set to true to turn the MODE shift button into one that's only active while held.
-// Set as false for layer cycle behaviour of press to cycle between [OFF, ON-ONCE, LOCKED-ON]
-BehringerCMDStudio2a.holdToModeShift = true;
+// Edit preferences in the Behringer-CMDStudio2a-Enhanced-preferences.js file, not here.
+// This just sets defaults to be used when someone copies in their old preferences file.
 
+var BehringerCMDStudio2aPreferenceDefaults = {
+    // Set to true to turn the MODE shift button into one that's only active while held.
+    // Set as false for layer cycle behaviour of press to cycle between [OFF, ON-ONCE, LOCKED-ON]
+    holdToModeShift: true,
 
-// Sets the jogwheels sensitivity. 1 is default, 2 is twice as sensitive, 0.5 is half as sensitive.
-// First entry is default mode, second is shifted mode.
-BehringerCMDStudio2a.scratchSensitivity = [1.0, 10.0];
+    // Sets the jogwheels sensitivity. 1 is default, 2 is twice as sensitive, 0.5 is half as sensitive.
+    // First entry is default mode, second is shifted mode.
+    scratchSensitivity: [1.0, 10.0],
+
+    // Semantic mode names.
+    // Change the value on these to soft-map to mode1/mode2 and the button will change behaviour.
+    // By default MODE1 is edit LOOP mode, and MODE2 is edit INTROOUTRO mode.
+    // Valid values are 'mode1', 'mode2' and 'disabled'.
+    editModes: {
+        loop:       'mode1',
+        introoutro: 'mode2',
+    },
+
+    // What edit mode to start in.
+    // Value values are: off, loop, introoutro.
+    startInEditMode: 'introoutro',
+
+    // Whether to start with vinyl mode enabled or not.
+    startInVinylMode: true,
+};
+
+BehringerCMDStudio2a.preferences = {};
+
+// Ew, no Object.assign(), just how out-of-date is QTScript anyway?
+(function () {
+//print("Copying preferences...");
+var sources = [BehringerCMDStudio2aPreferenceDefaults, BehringerCMDStudio2aPreferences];
+for (var i = 0; i < sources.length; i++) {
+    var source = sources[i];
+    for (var key in source) {
+        //print("  Looking at key '" + key + "'");
+        if (source.hasOwnProperty(key)) {
+            //print("    ...copying.");
+            BehringerCMDStudio2a.preferences[key] = source[key];
+        }
+    }
+}
+//print("...preferences copied");
+})();
 
 // Semantic mode names.
 // Change the value on these to soft-map to mode1/mode2 and the button will change behaviour.
 // By default MODE1 is edit LOOP mode, and MODE2 is edit INTROOUTRO mode.
-BehringerCMDStudio2a.editModes.loop       = BehringerCMDStudio2a.editModes.mode1;
-BehringerCMDStudio2a.editModes.introoutro = BehringerCMDStudio2a.editModes.mode2;
+BehringerCMDStudio2a.editModes.loop       = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.loop || 'mode1'];
+BehringerCMDStudio2a.editModes.introoutro = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.introoutro || 'mode2'];
 
 // ***************************** Global Vars **********************************
 
@@ -105,6 +144,13 @@ BehringerCMDStudio2a.init = function () {
     // Initialise anything that might not be in the correct state.
     BehringerCMDStudio2a.initLEDs();
     midi.sendShortMsg(0x90, 0x25, this.colours.on); // Folder
+    this.vinylButton = this.preferences.startInVinylMode;
+    this.updateVinylLED();
+
+    for (var i = 0; i < 2; i++) {
+        this.editMode[i] = this.editModes[this.preferences.startInEditMode];
+        this.updateEditModeColour(i + 1);
+    }
 }
 
 BehringerCMDStudio2a.shutdown = function () {
@@ -117,6 +163,14 @@ BehringerCMDStudio2a.updateModeColour = function () {
         midi.sendShortMsg(0x90, 0x23, this.colours.blink);
     } else {
         midi.sendShortMsg(0x90, 0x23, this.modeShift ? this.colours.on : this.colours.off);
+    }
+}
+
+BehringerCMDStudio2a.updateVinylLED = function () {
+    if (this.vinylButton) {
+        midi.sendShortMsg(0x90, 0x22, this.colours.on);
+    } else {
+        midi.sendShortMsg(0x90, 0x22, this.colours.off);
     }
 }
 
@@ -139,7 +193,7 @@ BehringerCMDStudio2a.setModeLock = function (lock) {
 }
 
 BehringerCMDStudio2a.modeShifted = function () {
-    if (this.holdToModeShift) {
+    if (this.preferences.holdToModeShift) {
         return this.modeShift;
     }
     if (!this.modeShift) {
@@ -160,6 +214,7 @@ BehringerCMDStudio2a.updateEditModeColour = function (deck) {
     } else if (mode === this.editModes.mode1) {
         midi.sendShortMsg(0x90, control, this.colours.on);
     } else {
+        // FIXME: should check if a mode2 is defined and skip to off if it isn't.
         midi.sendShortMsg(0x90, control, this.colours.blink);
     }
 }
@@ -191,11 +246,7 @@ BehringerCMDStudio2a.assignButtonsPush = function (channel, control, value, stat
 BehringerCMDStudio2a.vinylButtonPush = function (channel, control, value, status, group) {
     if (value === 127) { // Button pushed
         this.vinylButton = !this.vinylButton; //opposite states
-        if (this.vinylButton){
-            midi.sendShortMsg(0x90, 0x22, this.colours.on);
-        } else {
-            midi.sendShortMsg(0x90, 0x22, this.colours.off);
-        }
+        this.updateVinylLED();
     }
 }
 
@@ -203,10 +254,8 @@ BehringerCMDStudio2a.vinylButtonPush = function (channel, control, value, status
 
 // Mode button ON/OFF
 BehringerCMDStudio2a.modeButtonPush = function (channel, control, value, status, group) {
-    // FIXME
-    //print('modeButtonPush: ch ' + channel + ', con ' + control + ', val ' + value + ', status ' + status + ', group ' + group);
     if (value === 127 ) { // Button pushed
-        if (this.holdToModeShift) {
+        if (this.preferences.holdToModeShift) {
             this.setModeShift(true);
         } else if (this.modeLock) {
             this.setModeShift(false); // locked -> reset to unshifted
@@ -216,7 +265,7 @@ BehringerCMDStudio2a.modeButtonPush = function (channel, control, value, status,
             this.setModeShift(true); // unshifted -> shifted
         }
     } else { // Button release
-        if (this.holdToModeShift) {
+        if (this.preferences.holdToModeShift) {
             this.setModeShift(false);
         }
     }
@@ -492,7 +541,7 @@ BehringerCMDStudio2a.wheelTurn = function (channel, control, value, status, grou
     var deck_array = deck-1;
     var newValue = value-64;
     if (engine.isScratching(deck)) {
-        newValue *= BehringerCMDStudio2a.scratchSensitivity[this.modeShift ? 1 : 0];
+        newValue *= this.preferences.scratchSensitivity[this.modeShift ? 1 : 0];
         engine.scratchTick(deck, newValue);  // Scratch!
     } else {
         engine.setValue(group, "jog", newValue); // Jog.
