@@ -18,8 +18,8 @@
 // Master function definition.
 function BehringerCMDStudio2a() {}
 
-// EDIT mode state (Assign A button): OFF / MODE1 (steady) / MODE2 (blink)
-BehringerCMDStudio2a.editModes = { off: 0, mode1: 1, mode2: 2, disabled: -1 };
+// EDIT mode state (Assign A button): RED / BLUE / BLINK
+BehringerCMDStudio2a.editModes = { red: 0, blue: 1, blink: 2, disabled: -1 };
 
 // ***************************** Preferences ***********************
 
@@ -36,17 +36,17 @@ var BehringerCMDStudio2aPreferenceDefaults = {
     scratchSensitivity: [1.0, 10.0],
 
     // Semantic mode names.
-    // Change the value on these to soft-map to mode1/mode2 and the button will change behaviour.
-    // By default MODE1 is edit LOOP mode, and MODE2 is edit INTROOUTRO mode.
-    // Valid values are 'mode1', 'mode2' and 'disabled'.
+    // By default RED is SAMPLE mode, BLUE is edit LOOP mode, and BLINK is edit INTROOUTRO mode.
+    // Valid values are 'red', 'blue', 'blink' and 'disabled'.
     editModes: {
-        loop:       'mode1',
-        introoutro: 'mode2',
+        sample:     'red',
+        loop:       'blue',
+        introoutro: 'blink',
     },
 
     // What edit mode to start in.
-    // Value values are: off, loop, introoutro.
-    startInEditMode: 'introoutro',
+    // Value values are: sample, loop, introoutro.
+    startInEditMode: 'sample',
 
     // Whether to start with vinyl mode enabled or not.
     startInVinylMode: true,
@@ -74,11 +74,9 @@ for (var i = 0; i < sources.length; i++) {
 //print("...preferences copied");
 })();
 
-// Semantic mode names.
-// Change the value on these to soft-map to mode1/mode2 and the button will change behaviour.
-// By default MODE1 is edit LOOP mode, and MODE2 is edit INTROOUTRO mode.
-BehringerCMDStudio2a.editModes.loop       = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.loop || 'mode1'];
-BehringerCMDStudio2a.editModes.introoutro = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.introoutro || 'mode2'];
+BehringerCMDStudio2a.editModes.sample     = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.sample || 'red'];
+BehringerCMDStudio2a.editModes.loop       = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.loop || 'blue'];
+BehringerCMDStudio2a.editModes.introoutro = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.introoutro || 'blink'];
 
 // ***************************** Global Vars **********************************
 
@@ -95,7 +93,7 @@ BehringerCMDStudio2a.fileButton = false;
 BehringerCMDStudio2a.modeShift = false;
 BehringerCMDStudio2a.modeLock = false;
 
-BehringerCMDStudio2a.editMode = [BehringerCMDStudio2a.editModes.off, BehringerCMDStudio2a.editModes.off];
+BehringerCMDStudio2a.editMode = [BehringerCMDStudio2a.editModes.red, BehringerCMDStudio2a.editModes.red];
 
 // This is an odd order because they're aligned vertically not in the button order.
 // This is so that 1/8 to 1 are on the left and 2 to 16 are on the right.
@@ -130,6 +128,11 @@ BehringerCMDStudio2a.colours = {
     off: 0x00, // red
     on:  0x01, // green for play, blue for everything else
     blink: 0x02,
+
+    disabled: 0x00,
+    red:      0x00,
+    blue:     0x01,
+    green:    0x01,
 };
 
 // ************************ Initialisation stuff. *****************************
@@ -214,20 +217,22 @@ BehringerCMDStudio2a.modeShifted = function () {
 BehringerCMDStudio2a.updateEditModeColour = function (deck) {
     var mode = this.editMode[deck - 1];
     var control = deck === 1 ? 0x08 : 0x38; // Assign A on deck A or B.
-    if (mode === this.editModes.off) {
-        midi.sendShortMsg(0x90, control, this.colours.off);
-    } else if (mode === this.editModes.mode1) {
-        midi.sendShortMsg(0x90, control, this.colours.on);
-    } else {
-        // FIXME: should check if a mode2 is defined and skip to off if it isn't.
+    if (mode === this.editModes.blink) {
         midi.sendShortMsg(0x90, control, this.colours.blink);
+    } else if (mode === this.editModes.red) {
+        midi.sendShortMsg(0x90, control, this.colours.red);
+    } else if (mode === this.editModes.blue) {
+        midi.sendShortMsg(0x90, control, this.colours.blue);
+    } else {
+        midi.sendShortMsg(0x90, control, this.colours.off);
     }
 }
 
 BehringerCMDStudio2a.cycleEditMode = function (deck) {
+    // FIXME: should check which modes are defined and skip. Or define an order?
     this.editMode[deck - 1]++;
-    if (this.editMode[deck - 1] > this.editModes.mode2) {
-        this.editMode[deck - 1] = this.editModes.off;
+    if (this.editMode[deck - 1] > this.editModes.blink) {
+        this.editMode[deck - 1] = this.editModes.red;
     }
     this.updateEditModeColour(deck);
 }
@@ -458,7 +463,7 @@ BehringerCMDStudio2a.hotCueButtons = function (channel, control, value, status, 
             // Edit mode LOOP: beatloops 1/4 to 1
             engine.setValue(group, "beatloop_" + this.beatLoops[button - 1] + "_toggle", 1);
         } else {
-            // Edit mode OFF: use hotcues 1-4
+            // Edit mode SAMPLE: use hotcues 1-4
             // Edit mode INTROOUTRO: use hotcues 5-8
             if (this.editMode[deck - 1] === this.editModes.introoutro) {
                 button += 4;
@@ -484,8 +489,8 @@ BehringerCMDStudio2a.sampleButtons = function (channel, control, value, status, 
         var button = control - (deck === 1 ? 0x0D : 0x3D);
         if (button > 2) button--; // Buttons 2-3 have a gap between.
 
-        if (this.editMode[deck - 1] === this.editModes.off) {
-            // Edit mode OFF: play samples
+        if (this.editMode[deck - 1] === this.editModes.sample) {
+            // Edit mode SAMPLE: play samples
 
             if (!this.modeShifted()) {
                 engine.setValue(group, "start_play", 1); // If not mode shift, play from start.

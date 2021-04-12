@@ -10,12 +10,12 @@ var BehringerCMDStudio2aPreferences = {
     scratchSensitivity: [1.0, 10.0],
 
     // Semantic mode names.
-    // Change the value on these to soft-map to mode1/mode2 and the button will change behaviour.
-    // By default MODE1 is edit LOOP mode, and MODE2 is edit INTROOUTRO mode.
-    // Valid values are 'mode1', 'mode2' and 'disabled'.
+    // By default RED is SAMPLE mode, BLUE is edit LOOP mode, and BLINK is edit INTROOUTRO mode.
+    // Valid values are 'red', 'blue', 'blink' and 'disabled'.
     editModes: {
-        loop:       'mode1',
-        introoutro: 'mode2',
+        sample:     'blink',
+        loop:       'blue',
+        introoutro: 'red',
     },
 
     // What edit mode to start in.

@@ -58,11 +58,16 @@ With mode-shift or mode-lock active the plus/minus buttons will beatjump forward
 
 The *Assign A* button is now an "edit mode" switch that cycles between three editing modes:
 
-* First is "off" with red LED, controller functions are unchanged.
+* First is "sample" editing mode, with red LED.
 * Second is "loop" editing mode with blue LED.
 * This is "intro-outro" editing mode with flashing red/blue LED.
 
 If you want to change the order of the "edit modes", you can do this in the `editModes` section of the preferences file. You can also customize the `startInEditMode` to pick which edit mode to start in when you fire up Mixxx.
+
+#### Sample editing mode.
+
+* The hotcue buttons give access to hotcues 1-4.
+* The sample buttons give access to sample banks 1-4.
 
 #### Loop editing mode
 
