@@ -48,6 +48,8 @@ Pressing the File button with a track selected will load it into the first avail
 
 Pressing the File button while mode-shift is active will start previewing the currently selected track, or stop the current preview from playing.
 
+You can stop the preview deck from automatically opening and closing as you do this by setting `autoOpenPreviewDeck` to `false` in the preferences file.
+
 ### Beat Jumping
 
 With mode-shift or mode-lock active the plus/minus buttons will beatjump forwards or backwards by the beatjump amount. This takes priority over other uses of the plus/minus buttons.

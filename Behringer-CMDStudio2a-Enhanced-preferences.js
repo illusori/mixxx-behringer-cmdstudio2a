@@ -24,4 +24,7 @@ var BehringerCMDStudio2aPreferences = {
 
     // Whether to start with vinyl mode enabled or not.
     startInVinylMode: true,
+
+    // Whether to automatically open the preview deck when previewing with shift-FILE.
+    autoOpenPreviewDeck: true,
 };

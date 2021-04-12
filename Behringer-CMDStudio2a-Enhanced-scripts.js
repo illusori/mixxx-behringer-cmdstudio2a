@@ -50,6 +50,9 @@ var BehringerCMDStudio2aPreferenceDefaults = {
 
     // Whether to start with vinyl mode enabled or not.
     startInVinylMode: true,
+
+    // Whether to automatically open the preview deck when previewing with shift-FILE.
+    autoOpenPreviewDeck: true,
 };
 
 BehringerCMDStudio2a.preferences = {};
@@ -142,7 +145,7 @@ BehringerCMDStudio2a.initLEDs = function () {
 
 BehringerCMDStudio2a.init = function () {
     // Initialise anything that might not be in the correct state.
-    BehringerCMDStudio2a.initLEDs();
+    this.initLEDs();
     midi.sendShortMsg(0x90, 0x25, this.colours.on); // Folder
     this.vinylButton = this.preferences.startInVinylMode;
     this.updateVinylLED();
@@ -151,6 +154,8 @@ BehringerCMDStudio2a.init = function () {
         this.editMode[i] = this.editModes[this.preferences.startInEditMode];
         this.updateEditModeColour(i + 1);
     }
+
+    this.previewDeckWasOpen = engine.getValue('[PreviewDeck]', 'show_previewdeck');
 }
 
 BehringerCMDStudio2a.shutdown = function () {
@@ -294,8 +299,15 @@ BehringerCMDStudio2a.fileButtonPush = function (channel, control, value, status,
                 // Shift: load to preview or stop previewing.
                 if (engine.getValue('[PreviewDeck1]', "play")) {
                     engine.setValue('[PreviewDeck1]', "stop", 1);
+                    if (!this.previewDeckWasOpen && this.preferences.autoOpenPreviewDeck) {
+                        engine.setValue('[PreviewDeck]', 'show_previewdeck', 0);
+                    }
                 } else {
                     engine.setValue('[PreviewDeck1]', "LoadSelectedTrackAndPlay", 1);
+                    this.previewDeckWasOpen = engine.getValue('[PreviewDeck]', 'show_previewdeck');
+                    if (!this.previewDeckWasOpen && this.preferences.autoOpenPreviewDeck) {
+                        engine.setValue('[PreviewDeck]', 'show_previewdeck', 1);
+                    }
                 }
             } else {
                 // Load to first stopped deck.
