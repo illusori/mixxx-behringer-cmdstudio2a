@@ -239,7 +239,7 @@ BehringerCMDStudio2a.cycleEditMode = function (deck) {
 
 // Assign A button: cycle through edit modes: OFF/MODE1/MODE2
 BehringerCMDStudio2a.assignButtonsPush = function (channel, control, value, status, group) {
-    if (value === 127 ) {
+    if (value === 127) {
         // Button pushed
         if (this.debug) {
             this.debugLEDs();
@@ -264,7 +264,7 @@ BehringerCMDStudio2a.vinylButtonPush = function (channel, control, value, status
 
 // Mode button ON/OFF
 BehringerCMDStudio2a.modeButtonPush = function (channel, control, value, status, group) {
-    if (value === 127 ) { // Button pushed
+    if (value === 127) { // Button pushed
         if (this.preferences.holdToModeShift) {
             this.setModeShift(true);
         } else if (this.modeLock) {
@@ -284,15 +284,15 @@ BehringerCMDStudio2a.modeButtonPush = function (channel, control, value, status,
 
 //Folder button behaviour
 BehringerCMDStudio2a.folderButtonPush = function (channel, control, value, status, group) {
-        if (BehringerCMDStudio2a.folderButton) {
-            engine.setValue(group, "ToggleSelectedSidebarItem",1); // expand/collapse view
-        } else {
-            BehringerCMDStudio2a.folderButton = true;
-            midi.sendShortMsg(0x90, 0x25, this.colours.on); // Folder button led ON
-            BehringerCMDStudio2a.fileButton = false;
-            midi.sendShortMsg(0x90, 0x26, this.colours.off); // File button led OFF
-            // focus on folder view
-        }
+    if (BehringerCMDStudio2a.folderButton) {
+        engine.setValue(group, "ToggleSelectedSidebarItem", 1); // expand/collapse view
+    } else {
+        BehringerCMDStudio2a.folderButton = true;
+        midi.sendShortMsg(0x90, 0x25, this.colours.on); // Folder button led ON
+        BehringerCMDStudio2a.fileButton = false;
+        midi.sendShortMsg(0x90, 0x26, this.colours.off); // File button led OFF
+        // focus on folder view
+    }
 }
 
 
@@ -335,7 +335,16 @@ BehringerCMDStudio2a.fileButtonPush = function (channel, control, value, status,
 // Up button behaviour (folder/file depending)
 BehringerCMDStudio2a.upButtonPush = function (channel, control, value, status, group) {
     if (BehringerCMDStudio2a.folderButton) { // Folder mode
-        engine.setValue(group, "SelectPrevPlaylist", 1);
+        // Act as though mode lock is ON for convenience
+        if (!this.modeShift) { // Mode shift is OFF
+            engine.setValue(group, "SelectPrevPlaylist", 1);
+        } else {
+            //engine.setValue(group, "SelectPlaylist", -10);
+            // Doesn't work as advertised, use this hack
+            for (var i = 0; i < 10; i++) {
+                engine.setValue(group, "SelectPrevPlaylist", 1);
+            }
+        }
     } else { // File mode
         // Act as though mode lock is ON for convenience
         if (!this.modeShift) { // Mode shift is OFF
@@ -351,7 +360,16 @@ BehringerCMDStudio2a.upButtonPush = function (channel, control, value, status, g
 // Down button behaviour (folder/file depending)
 BehringerCMDStudio2a.downButtonPush = function (channel, control, value, status, group) {
     if (BehringerCMDStudio2a.folderButton) { // Folder mode
-        engine.setValue(group, "SelectNextPlaylist", 1);
+        // Act as though mode lock is ON for convenience
+        if (!this.modeShift) { // Mode shift is OFF
+            engine.setValue(group, "SelectNextPlaylist", 1);
+        } else {
+            //engine.setValue(group, "SelectPlaylist", 10);
+            // Doesn't work as advertised, use this hack
+            for (var i = 0; i < 10; i++) {
+                engine.setValue(group, "SelectNextPlaylist", 1);
+            }
+        }
     } else { // File mode
         // Act as though mode lock is ON for convenience
         if (!this.modeShift) { // Mode shift is OFF
