@@ -69,13 +69,19 @@ If you want to change the order of the "edit modes", you can do this in the `edi
 * The hotcue buttons give access to hotcues 1-4.
 * The sample buttons give access to sample banks 1-4.
 
+This is the default behaviour from the old controller mapping.
+
 #### Loop editing mode
 
 * Assign B toggles loop enabled. (This applies to all modes, not just loop editing mode.)
 * Plus/minus control loop in/loop out markers.
-* The hotcue buttons and sample buttons become beatloop buttons. From the top: fractional beats on the left from 1/8 to 1, and multiple-beat loops on the right from 2 to 16.
+* The hotcue buttons and sample buttons become beatloop buttons, or when you mode-shift with the mode button they will alter the beatjump size instead. From the top: fractional beats on the left from 1/8 to 1, and multiple-beat loops on the right from 2 to 16.
 
-#### Intro-Outro editing mode
+#### Intro-Outro editing mode (aka: "prepare" mode)
 
-* The hotcue buttons now grant access to hotcues 4-8 instead of 1-4.
+* The hotcue buttons now grant access to hotcues 5-8 instead of 1-4.
 * The sampler buttons now activate intro-start and intro-end on 1 and 2; and outro-start and outro-end on 3 and 4. If you mode-shift with the mode button it will clear the markers.
+
+Intent of this mode is to help you prepare or cue up a track.
+
+How you make use of the hotcues is up to you, but I like to stick the start/end of the beat or the melody (whichever makes sense for the track) on hotcue 5 and 7, and colour them Green for Groove; then stick start/end vocals on 6 and 8, colouring them Violet for Vocals.

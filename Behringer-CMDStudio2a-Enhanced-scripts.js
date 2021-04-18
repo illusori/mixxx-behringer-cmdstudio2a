@@ -83,7 +83,8 @@ BehringerCMDStudio2a.editModes.introoutro = BehringerCMDStudio2a.editModes[Behri
 // Vinyl button, ON -> scratch mode
 BehringerCMDStudio2a.vinylButton = false;
 
-BehringerCMDStudio2a.minusPlusPushed = [[false,false],[false,false]]; // Status: pushed/not pushed of minus and plus buttons.
+// Status: pushed/not pushed of minus and plus buttons.
+BehringerCMDStudio2a.minusPlusPushed = [{ plus: false, minus: false }, { plus: false, minus: false }];
 
 // File and Folder buttons for library navigation
 BehringerCMDStudio2a.folderButton = true; // Default is ON
@@ -104,24 +105,24 @@ BehringerCMDStudio2a.beatLoops = [0.125, 2, 0.25, 4, 0.5, 8, 1, 16];
 BehringerCMDStudio2a.debug = false;
 
 BehringerCMDStudio2a.colourableControls = [
-        0x08, // Assign A A
-        0x09, // Assign A B
-        0x38, // Assign B A
-        0x39, // Assign B B
-        0x01, // Cue A
-        0x31, // Cue B
-        0x02, // Play A
-        0x32, // Play B
-        0x16, // PFL A
-        0x46, // PFL B
+    0x08, // Assign A A
+    0x09, // Assign A B
+    0x38, // Assign B A
+    0x39, // Assign B B
+    0x01, // Cue A
+    0x31, // Cue B
+    0x02, // Play A
+    0x32, // Play B
+    0x16, // PFL A
+    0x46, // PFL B
 
-        0x22, // vinyl
-        0x23, // mode
-        0x25, // Folder
-        0x26, // File
+    0x22, // vinyl
+    0x23, // mode
+    0x25, // Folder
+    0x26, // File
 
-        0x04, // Sync A
-        0x34, // Sync B
+    0x04, // Sync A
+    0x34, // Sync B
 ];
 
 BehringerCMDStudio2a.colours = {
@@ -299,35 +300,35 @@ BehringerCMDStudio2a.folderButtonPush = function (channel, control, value, statu
 
 //File button behaviour
 BehringerCMDStudio2a.fileButtonPush = function (channel, control, value, status, group) {
-        if (BehringerCMDStudio2a.fileButton) {
-            if (this.modeShifted()) {
-                // Shift: load to preview or stop previewing.
-                if (engine.getValue('[PreviewDeck1]', "play")) {
-                    engine.setValue('[PreviewDeck1]', "stop", 1);
-                    if (!this.previewDeckWasOpen && this.preferences.autoOpenPreviewDeck) {
-                        engine.setValue('[PreviewDeck]', 'show_previewdeck', 0);
-                    }
-                } else {
-                    engine.setValue('[PreviewDeck1]', "LoadSelectedTrackAndPlay", 1);
-                    this.previewDeckWasOpen = engine.getValue('[PreviewDeck]', 'show_previewdeck');
-                    if (!this.previewDeckWasOpen && this.preferences.autoOpenPreviewDeck) {
-                        engine.setValue('[PreviewDeck]', 'show_previewdeck', 1);
-                    }
+    if (BehringerCMDStudio2a.fileButton) {
+        if (this.modeShifted()) {
+            // Shift: load to preview or stop previewing.
+            if (engine.getValue('[PreviewDeck1]', "play")) {
+                engine.setValue('[PreviewDeck1]', "stop", 1);
+                if (!this.previewDeckWasOpen && this.preferences.autoOpenPreviewDeck) {
+                    engine.setValue('[PreviewDeck]', 'show_previewdeck', 0);
                 }
             } else {
-                // Load to first stopped deck.
-                engine.setValue(group, "LoadSelectedIntoFirstStopped", 1);
+                engine.setValue('[PreviewDeck1]', "LoadSelectedTrackAndPlay", 1);
+                this.previewDeckWasOpen = engine.getValue('[PreviewDeck]', 'show_previewdeck');
+                if (!this.previewDeckWasOpen && this.preferences.autoOpenPreviewDeck) {
+                    engine.setValue('[PreviewDeck]', 'show_previewdeck', 1);
+                }
             }
         } else {
-            BehringerCMDStudio2a.folderButton = false;
-            midi.sendShortMsg(0x90, 0x25, this.colours.off); // Folder button led OFF
-            BehringerCMDStudio2a.fileButton = true;
-            midi.sendShortMsg(0x90, 0x26, this.colours.on); // File button led ON
-            // focus on file view
-            // Move cursor down one to highlight top track, otherwise there's no
-            // visible effect within Mixxx that we've changed view.
-            engine.setValue(group, "SelectNextTrack", 1);
+            // Load to first stopped deck.
+            engine.setValue(group, "LoadSelectedIntoFirstStopped", 1);
         }
+    } else {
+        BehringerCMDStudio2a.folderButton = false;
+        midi.sendShortMsg(0x90, 0x25, this.colours.off); // Folder button led OFF
+        BehringerCMDStudio2a.fileButton = true;
+        midi.sendShortMsg(0x90, 0x26, this.colours.on); // File button led ON
+        // focus on file view
+        // Move cursor down one to highlight top track, otherwise there's no
+        // visible effect within Mixxx that we've changed view.
+        engine.setValue(group, "SelectNextTrack", 1);
+    }
 }
 
 
@@ -385,35 +386,35 @@ BehringerCMDStudio2a.downButtonPush = function (channel, control, value, status,
 // Speed/Loop controls
 // Minus buttons
 BehringerCMDStudio2a.minusButtonPush = function (channel, control, value, status, group) {
-    var canal = script.deckFromGroup(group)-1;
+    var deck = script.deckFromGroup(group);
 
-    BehringerCMDStudio2a.minusPlusPushed[0][canal] = (value === 127);
+    BehringerCMDStudio2a.minusPlusPushed[deck - 1].minus = (value === 127);
 
     if (!this.modeShifted()) {
         // Not mode Shift
-        if (this.editMode[canal] === this.editModes.loop) {
+        if (this.editMode[deck - 1] === this.editModes.loop) {
             // loop mode
             if (value === 127) {
                 //Button push
-                engine.setValue(group,"loop_in",1);
+                engine.setValue(group, "loop_in", 1);
             } else {
                 // Button release
-                engine.setValue(group,"loop_in",0);
+                engine.setValue(group, "loop_in", 0);
             }
         } else {
             // Speed (tempo) mode
             if (value === 127) {
                 // Button push
-                if (BehringerCMDStudio2a.minusPlusPushed[1][canal]) {
+                if (BehringerCMDStudio2a.minusPlusPushed[deck - 1].plus) {
                     // Plus button is pushed too
-                    engine.setValue(group,"rate",0); // Reset slider
+                    engine.setValue(group, "rate", 0); // Reset slider
                 } else {
-                    engine.setValue(group,"rate_temp_down",1);
+                    engine.setValue(group, "rate_temp_down", 1);
                 }
             } else {
                 // Button release
-                BehringerCMDStudio2a.minusPlusPushed[0][canal] = false;
-                engine.setValue(group,"rate_temp_down",0);
+                BehringerCMDStudio2a.minusPlusPushed[deck - 1].minus = false;
+                engine.setValue(group, "rate_temp_down", 0);
             }
         }
     } else {
@@ -429,35 +430,35 @@ BehringerCMDStudio2a.minusButtonPush = function (channel, control, value, status
 
 // Plus buttons
 BehringerCMDStudio2a.plusButtonPush = function (channel, control, value, status, group) {
-    var canal = script.deckFromGroup(group)-1;
+    var deck = script.deckFromGroup(group);
 
-    BehringerCMDStudio2a.minusPlusPushed[1][canal] = (value === 127);
+    BehringerCMDStudio2a.minusPlusPushed[deck - 1].plus = (value === 127);
 
     if (!this.modeShifted()) {
         // Not mode Shift
-        if (this.editMode[canal] === this.editModes.loop) {
+        if (this.editMode[deck - 1] === this.editModes.loop) {
             // loop mode
             if (value === 127) {
                 //Button push
-                engine.setValue(group,"loop_out",1);
+                engine.setValue(group, "loop_out", 1);
             } else {
                 // Button release
-                engine.setValue(group,"loop_out",0);
+                engine.setValue(group, "loop_out", 0);
             }
         } else {
             // Speed (tempo) mode
             if (value === 127) {
                 // Button push
-                if (BehringerCMDStudio2a.minusPlusPushed[0][canal]) {
-                    // Plus button is pushed too
-                    engine.setValue(group,"rate",0); // Reset slider
+                if (BehringerCMDStudio2a.minusPlusPushed[deck - 1].minus) {
+                    // Minus button is pushed too
+                    engine.setValue(group, "rate", 0); // Reset slider
                 } else {
-                    engine.setValue(group,"rate_temp_up",1);
+                    engine.setValue(group, "rate_temp_up", 1);
                 }
             } else {
                 // Button release
-                BehringerCMDStudio2a.minusPlusPushed[1][canal] = false;
-                engine.setValue(group,"rate_temp_up",0);
+                BehringerCMDStudio2a.minusPlusPushed[deck - 1].plus = false;
+                engine.setValue(group, "rate_temp_up", 0);
             }
         }
     } else {
@@ -478,8 +479,16 @@ BehringerCMDStudio2a.hotCueButtons = function (channel, control, value, status, 
         var button = control - (deck === 1 ? 0x09 : 0x39);
 
         if (this.editMode[deck - 1] === this.editModes.loop) {
-            // Edit mode LOOP: beatloops 1/4 to 1
-            engine.setValue(group, "beatloop_" + this.beatLoops[button - 1] + "_toggle", 1);
+            var beats = this.beatLoops[button - 1];
+            if (!this.modeShifted()) {
+                // Not mode Shift
+                // Edit mode LOOP: beatloops 1/4 to 1
+               engine.setValue(group, "beatloop_" + beats + "_toggle", 1);
+            } else {
+                // Mode Shifted
+                // Edit mode LOOP: set beatjump size 1/4 to 1
+               engine.setValue(group, "beatjump_size", beats);
+            }
         } else {
             // Edit mode SAMPLE: use hotcues 1-4
             // Edit mode INTROOUTRO: use hotcues 5-8
@@ -516,9 +525,17 @@ BehringerCMDStudio2a.sampleButtons = function (channel, control, value, status, 
                 engine.setValue(group, "start_stop", 1); // Else, stop and go to start.
             }
         } else if (this.editMode[deck - 1] === this.editModes.loop) {
-            // Edit mode LOOP: beatloops 2 to 16
             group = deck === 1 ? '[Channel1]' : '[Channel2]';
-            engine.setValue(group, "beatloop_" + this.beatLoops[button + 3] + "_toggle", 1);
+            var beats = this.beatLoops[button + 3];
+            if (!this.modeShifted()) {
+                // Not mode Shift
+                // Edit mode LOOP: beatloops 2 to 16
+                engine.setValue(group, "beatloop_" + beats + "_toggle", 1);
+            } else {
+                // Mode Shifted
+                // Edit mode LOOP: set beatjump size 2 to 16
+               engine.setValue(group, "beatjump_size", beats);
+            }
         } else if (this.editMode[deck - 1] === this.editModes.introoutro) {
             // Edit mode INTROOUTRO: edit intro/outro markers.
             group = deck === 1 ? '[Channel1]' : '[Channel2]';
@@ -540,13 +557,12 @@ BehringerCMDStudio2a.sampleButtons = function (channel, control, value, status, 
 
 // Cue buttons, Mode depending
 BehringerCMDStudio2a.cue = function (channel, control, value, status, group) {
-
-	if (value === 127 && this.modeShifted()) { // Mode is ON.
-		engine.setValue(group, "cue_gotoandstop", 1);
-	} else {
-		// Mode is OFF.
-		engine.setValue(group, "cue_default", (value == 127) ? 1 : 0);
-	}
+    if (value === 127 && this.modeShifted()) { // Mode is ON.
+            engine.setValue(group, "cue_gotoandstop", 1);
+    } else {
+            // Mode is OFF.
+            engine.setValue(group, "cue_default", (value == 127) ? 1 : 0);
+    }
 }
 
 
