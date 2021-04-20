@@ -120,9 +120,6 @@ BehringerCMDStudio2a.colourableControls = [
     0x23, // mode
     0x25, // Folder
     0x26, // File
-
-    0x04, // Sync A
-    0x34, // Sync B
 ];
 
 BehringerCMDStudio2a.colours = {
