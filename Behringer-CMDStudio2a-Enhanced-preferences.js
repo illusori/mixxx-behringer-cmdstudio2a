@@ -27,4 +27,7 @@ var BehringerCMDStudio2aPreferences = {
 
     // Whether to automatically open the preview deck when previewing with shift-FILE.
     autoOpenPreviewDeck: true,
+
+    // Whether to automatically enable/disable keylock during rate changes.
+    autoKeyLock: true,
 };

@@ -55,6 +55,9 @@ var BehringerCMDStudio2aPreferenceDefaults = {
 
     // Whether to automatically open the preview deck when previewing with shift-FILE.
     autoOpenPreviewDeck: true,
+
+    // Whether to automatically enable/disable keylock during rate changes.
+    autoKeyLock: true,
 };
 
 controller.preferences = {};
@@ -235,6 +238,8 @@ controller.initLEDs = function () {
 }
 
 controller.init = function (id, debugging) {
+    this.connections = [];
+
     // Initialise anything that might not be in the correct state.
     this.initLEDs();
     midi.sendShortMsg(this.statuses.colour, this.controls.folder, this.colours.on); // Folder
@@ -247,11 +252,20 @@ controller.init = function (id, debugging) {
     }
 
     this.previewDeckWasOpen = engine.getValue('[PreviewDeck]', 'show_previewdeck');
+
+    if (this.preferences.autoKeyLock) {
+        this.connections.push(engine.makeConnection('[Channel1]', 'rate', this.rateChanged));
+        this.connections.push(engine.makeConnection('[Channel2]', 'rate', this.rateChanged));
+    }
 }
 
 controller.shutdown = function () {
     // Leave the deck in a properly initialised state.
-    controller.initLEDs();
+    this.initLEDs();
+    this.connections.forEach(function (connection) {
+        connection.disconnect();
+    });
+    this.connections = [];
 }
 
 controller.updateModeColour = function () {
@@ -675,9 +689,7 @@ controller.wheelTouch = function (channel, control, value, status, group) {
 
 
 controller.wheelTurn = function (channel, control, value, status, group) {
-    //var deck = channel+1;
     var deck = script.deckFromGroup(group);
-    var deck_array = deck-1;
     var newValue = value-64;
     if (engine.isScratching(deck)) {
         newValue *= this.preferences.scratchSensitivity[this.modeShift ? 1 : 0];
@@ -687,6 +699,26 @@ controller.wheelTurn = function (channel, control, value, status, group) {
     }
 }
 
+controller.rateChanged = function (value, group, control) {
+    if (this.preferences.autoKeyLock) {
+        if (Math.abs(value) <= 0.001) {
+            engine.setValue(group, "keylock", 0);
+        } else {
+            engine.setValue(group, "keylock", 1);
+        }
+    }
+}
+
+controller.pitchTurn = function (channel, control, value, status, group) {
+    var deck = script.deckFromGroup(group);
+    var newValue = value-64;
+
+    if (newValue > 0) {
+        engine.setValue(group, "rate_perm_up" + (this.modeShift ? "_small" : ""), newValue);
+    } else if (newValue < 0) {
+        engine.setValue(group, "rate_perm_down" + (this.modeShift ? "_small" : ""), -newValue);
+    }
+}
 
 // Load Deck buttons. Loads to deck, or if mode-shifted clones other deck.
 controller.loadDeck = function (channel, control, value, status, group) {
