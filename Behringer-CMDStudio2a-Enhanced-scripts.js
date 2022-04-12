@@ -18,8 +18,10 @@
 // Master function definition.
 function BehringerCMDStudio2a() {}
 
+(function (controller) {
+
 // EDIT mode state (Assign A button): RED / BLUE / BLINK
-BehringerCMDStudio2a.editModes = { red: 0, blue: 1, blink: 2, disabled: -1 };
+controller.editModes = { red: 0, blue: 1, blink: 2, disabled: -1 };
 
 // ***************************** Preferences ***********************
 
@@ -55,7 +57,7 @@ var BehringerCMDStudio2aPreferenceDefaults = {
     autoOpenPreviewDeck: true,
 };
 
-BehringerCMDStudio2a.preferences = {};
+controller.preferences = {};
 
 // Ew, no Object.assign(), just how out-of-date is QTScript anyway?
 (function () {
@@ -67,62 +69,150 @@ for (var i = 0; i < sources.length; i++) {
         //print("  Looking at key '" + key + "'");
         if (source.hasOwnProperty(key)) {
             //print("    ...copying.");
-            BehringerCMDStudio2a.preferences[key] = source[key];
+            controller.preferences[key] = source[key];
         }
     }
 }
 //print("...preferences copied");
 })();
 
-BehringerCMDStudio2a.editModes.sample     = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.sample || 'red'];
-BehringerCMDStudio2a.editModes.loop       = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.loop || 'blue'];
-BehringerCMDStudio2a.editModes.introoutro = BehringerCMDStudio2a.editModes[BehringerCMDStudio2a.preferences.editModes.introoutro || 'blink'];
+controller.editModes.sample     = controller.editModes[controller.preferences.editModes.sample || 'red'];
+controller.editModes.loop       = controller.editModes[controller.preferences.editModes.loop || 'blue'];
+controller.editModes.introoutro = controller.editModes[controller.preferences.editModes.introoutro || 'blink'];
 
 // ***************************** Global Vars **********************************
 
 // Vinyl button, ON -> scratch mode
-BehringerCMDStudio2a.vinylButton = false;
+controller.vinylButton = false;
 
 // Status: pushed/not pushed of minus and plus buttons.
-BehringerCMDStudio2a.minusPlusPushed = [{ plus: false, minus: false }, { plus: false, minus: false }];
+controller.minusPlusPushed = [{ plus: false, minus: false }, { plus: false, minus: false }];
 
 // File and Folder buttons for library navigation
-BehringerCMDStudio2a.folderButton = true; // Default is ON
-BehringerCMDStudio2a.fileButton = false;
+controller.folderButton = true; // Default is ON
+controller.fileButton = false;
 
 // MODE button state: OFF / shift / lock;
-BehringerCMDStudio2a.modeShift = false;
-BehringerCMDStudio2a.modeLock = false;
+controller.modeShift = false;
+controller.modeLock = false;
 
-BehringerCMDStudio2a.editMode = [BehringerCMDStudio2a.editModes.red, BehringerCMDStudio2a.editModes.red];
+controller.editMode = [controller.editModes.red, controller.editModes.red];
 
 // This is an odd order because they're aligned vertically not in the button order.
 // This is so that 1/8 to 1 are on the left and 2 to 16 are on the right.
-BehringerCMDStudio2a.beatLoops = [0.125, 2, 0.25, 4, 0.5, 8, 1, 16];
+controller.beatLoops = [0.125, 2, 0.25, 4, 0.5, 8, 1, 16];
 
 // Set to true and each "Assign A" button press will cycle all controls to the next colour code.
 // So you can debug what controls respond to colour.
-BehringerCMDStudio2a.debug = false;
+controller.debug = false;
 
-BehringerCMDStudio2a.colourableControls = [
-    0x08, // Assign A A
-    0x09, // Assign A B
-    0x38, // Assign B A
-    0x39, // Assign B B
-    0x01, // Cue A
-    0x31, // Cue B
-    0x02, // Play A
-    0x32, // Play B
-    0x16, // PFL A
-    0x46, // PFL B
+controller.sharedControls = {
+    vinyl:  0x22,
+    mode:   0x23,
+    folder: 0x25,
+    file:   0x26,
+    up:     0x24,
+    down:   0x27,
 
-    0x22, // vinyl
-    0x23, // mode
-    0x25, // Folder
-    0x26, // File
+    head:   0x21,
+
+    crossFader: 0x20,
+};
+controller.deckControls = {
+    a:        0x08,
+    b:        0x09,
+    cue:      0x01,
+    play:     0x02,
+    pfl:      0x16,
+
+    sync:     0x04,
+
+    sampler1: 0x0E,
+    sampler2: 0x0F,
+    sampler3: 0x11,
+    sampler4: 0x12,
+
+    hotcue1:  0x0A,
+    hotcue2:  0x0B,
+    hotcue3:  0x0C,
+    hotcue4:  0x0D,
+
+    plus:     0x07,
+    minus:    0x06,
+
+    load:     0x17,
+
+    fxHigh:   0x13, // 0xB0 status
+    fxMid:    0x14, // 0xB0 status
+    fxLow:    0x15, // 0xB0 status
+
+    fader:    0x18, // 0xB0 status
+
+    platter:  0x03, // touch: 0x90 status on, 0x80 off; 0xB0 status turn
+
+    pitch:    0x05, // 0xB0 status
+};
+controller.deckNames = [
+    'left',
+    'right',
+];
+controller.deckOffsets = {
+    left:  0x00,
+    right: 0x30,
+};
+
+controller.controls = {};
+for (var key in controller.sharedControls) {
+    if (controller.sharedControls.hasOwnProperty(key)) {
+        controller.controls[key] = controller.sharedControls[key];
+    }
+}
+for (var deckName in controller.deckOffsets) {
+    if (controller.deckOffsets.hasOwnProperty(deckName)) {
+        for (var key in controller.deckControls) {
+            if (controller.deckControls.hasOwnProperty(key)) {
+                controller.controls[deckName + key.slice(0, 1).toUpperCase() + key.slice(1)] = controller.deckOffsets[deckName] + controller.deckControls[key];
+            }
+        }
+    }
+}
+
+controller.colourableControls = [
+    controller.controls.leftA,
+    controller.controls.leftB,
+    controller.controls.leftCue,
+    controller.controls.leftPlay,
+    controller.controls.leftPfl,
+
+    controller.controls.rightA,
+    controller.controls.rightB,
+    controller.controls.rightCue,
+    controller.controls.rightPlay,
+    controller.controls.rightPfl,
+
+    controller.controls.vinyl,
+    controller.controls.mode,
+    controller.controls.folder,
+    controller.controls.file,
 ];
 
-BehringerCMDStudio2a.colours = {
+controller.statuses = {
+    press:   0x90,
+    release: 0x80,
+    turn:    0xB0,
+
+    colour:   0x90,
+};
+
+controller.values = {
+    off: 0x00,
+    on:  0x7F,
+
+    release: 0x00,
+    press:   0x7F,
+};
+
+controller.colours = {
     off: 0x00, // red
     on:  0x01, // green for play, blue for everything else
     blink: 0x02,
@@ -135,19 +225,19 @@ BehringerCMDStudio2a.colours = {
 
 // ************************ Initialisation stuff. *****************************
 
-BehringerCMDStudio2a.initLEDs = function () {
+controller.initLEDs = function () {
     // (re)Initialise any LEDs that are direcctly controlled by this script.
     // Turn everything red (off)
     var that = this;
     this.colourableControls.forEach(function (control) {
-        midi.sendShortMsg(0x90, control, that.colours.off);
+        midi.sendShortMsg(that.statuses.colour, control, that.colours.off);
     });
 }
 
-BehringerCMDStudio2a.init = function () {
+controller.init = function (id, debugging) {
     // Initialise anything that might not be in the correct state.
     this.initLEDs();
-    midi.sendShortMsg(0x90, 0x25, this.colours.on); // Folder
+    midi.sendShortMsg(this.statuses.colour, this.controls.folder, this.colours.on); // Folder
     this.vinylButton = this.preferences.startInVinylMode;
     this.updateVinylLED();
 
@@ -159,28 +249,28 @@ BehringerCMDStudio2a.init = function () {
     this.previewDeckWasOpen = engine.getValue('[PreviewDeck]', 'show_previewdeck');
 }
 
-BehringerCMDStudio2a.shutdown = function () {
+controller.shutdown = function () {
     // Leave the deck in a properly initialised state.
-    BehringerCMDStudio2a.initLEDs();
+    controller.initLEDs();
 }
 
-BehringerCMDStudio2a.updateModeColour = function () {
+controller.updateModeColour = function () {
     if (this.modeLock) {
-        midi.sendShortMsg(0x90, 0x23, this.colours.blink);
+        midi.sendShortMsg(this.statuses.colour, this.controls.mode, this.colours.blink);
     } else {
-        midi.sendShortMsg(0x90, 0x23, this.modeShift ? this.colours.on : this.colours.off);
+        midi.sendShortMsg(this.statuses.colour, this.controls.mode, this.modeShift ? this.colours.on : this.colours.off);
     }
 }
 
-BehringerCMDStudio2a.updateVinylLED = function () {
+controller.updateVinylLED = function () {
     if (this.vinylButton) {
-        midi.sendShortMsg(0x90, 0x22, this.colours.on);
+        midi.sendShortMsg(this.statuses.colour, this.controls.vinyl, this.colours.on);
     } else {
-        midi.sendShortMsg(0x90, 0x22, this.colours.off);
+        midi.sendShortMsg(this.statuses.colour, this.controls.vinyl, this.colours.off);
     }
 }
 
-BehringerCMDStudio2a.setModeShift = function (shift) {
+controller.setModeShift = function (shift) {
     this.modeShift = shift;
     if (!shift) {
         // Auto turn off lock when unshifting.
@@ -189,7 +279,7 @@ BehringerCMDStudio2a.setModeShift = function (shift) {
     this.updateModeColour();
 }
 
-BehringerCMDStudio2a.setModeLock = function (lock) {
+controller.setModeLock = function (lock) {
     this.modeLock = lock;
     if (lock) {
         // Auto turn on shift when locking.
@@ -198,7 +288,7 @@ BehringerCMDStudio2a.setModeLock = function (lock) {
     this.updateModeColour();
 }
 
-BehringerCMDStudio2a.modeShifted = function () {
+controller.modeShifted = function () {
     if (this.preferences.holdToModeShift) {
         return this.modeShift;
     }
@@ -212,21 +302,21 @@ BehringerCMDStudio2a.modeShifted = function () {
     return true;
 }
 
-BehringerCMDStudio2a.updateEditModeColour = function (deck) {
+controller.updateEditModeColour = function (deck) {
     var mode = this.editMode[deck - 1];
-    var control = deck === 1 ? 0x08 : 0x38; // Assign A on deck A or B.
+    var control = this.controls[this.deckNames[deck - 1] + 'A']; // leftA or rightA
     if (mode === this.editModes.blink) {
-        midi.sendShortMsg(0x90, control, this.colours.blink);
+        midi.sendShortMsg(this.statuses.colour, control, this.colours.blink);
     } else if (mode === this.editModes.red) {
-        midi.sendShortMsg(0x90, control, this.colours.red);
+        midi.sendShortMsg(this.statuses.colour, control, this.colours.red);
     } else if (mode === this.editModes.blue) {
-        midi.sendShortMsg(0x90, control, this.colours.blue);
+        midi.sendShortMsg(this.statuses.colour, control, this.colours.blue);
     } else {
-        midi.sendShortMsg(0x90, control, this.colours.off);
+        midi.sendShortMsg(this.statuses.colour, control, this.colours.off);
     }
 }
 
-BehringerCMDStudio2a.cycleEditMode = function (deck) {
+controller.cycleEditMode = function (deck) {
     // FIXME: should check which modes are defined and skip. Or define an order?
     this.editMode[deck - 1]++;
     if (this.editMode[deck - 1] > this.editModes.blink) {
@@ -236,7 +326,7 @@ BehringerCMDStudio2a.cycleEditMode = function (deck) {
 }
 
 // Assign A button: cycle through edit modes: OFF/MODE1/MODE2
-BehringerCMDStudio2a.assignButtonsPush = function (channel, control, value, status, group) {
+controller.assignButtonsPush = function (channel, control, value, status, group) {
     if (value === 127) {
         // Button pushed
         if (this.debug) {
@@ -251,7 +341,7 @@ BehringerCMDStudio2a.assignButtonsPush = function (channel, control, value, stat
 
 
 // Vinyl button ON/OFF
-BehringerCMDStudio2a.vinylButtonPush = function (channel, control, value, status, group) {
+controller.vinylButtonPush = function (channel, control, value, status, group) {
     if (value === 127) { // Button pushed
         this.vinylButton = !this.vinylButton; //opposite states
         this.updateVinylLED();
@@ -261,7 +351,7 @@ BehringerCMDStudio2a.vinylButtonPush = function (channel, control, value, status
 
 
 // Mode button ON/OFF
-BehringerCMDStudio2a.modeButtonPush = function (channel, control, value, status, group) {
+controller.modeButtonPush = function (channel, control, value, status, group) {
     if (value === 127) { // Button pushed
         if (this.preferences.holdToModeShift) {
             this.setModeShift(true);
@@ -281,14 +371,14 @@ BehringerCMDStudio2a.modeButtonPush = function (channel, control, value, status,
 
 
 //Folder button behaviour
-BehringerCMDStudio2a.folderButtonPush = function (channel, control, value, status, group) {
-    if (BehringerCMDStudio2a.folderButton) {
+controller.folderButtonPush = function (channel, control, value, status, group) {
+    if (controller.folderButton) {
         engine.setValue(group, "ToggleSelectedSidebarItem", 1); // expand/collapse view
     } else {
-        BehringerCMDStudio2a.folderButton = true;
-        midi.sendShortMsg(0x90, 0x25, this.colours.on); // Folder button led ON
-        BehringerCMDStudio2a.fileButton = false;
-        midi.sendShortMsg(0x90, 0x26, this.colours.off); // File button led OFF
+        controller.folderButton = true;
+        midi.sendShortMsg(this.statuses.colour, this.controls.folder, this.colours.on);
+        controller.fileButton = false;
+        midi.sendShortMsg(this.statuses.colour, this.controls.file, this.colours.off);
         // focus on folder view
     }
 }
@@ -296,8 +386,8 @@ BehringerCMDStudio2a.folderButtonPush = function (channel, control, value, statu
 
 
 //File button behaviour
-BehringerCMDStudio2a.fileButtonPush = function (channel, control, value, status, group) {
-    if (BehringerCMDStudio2a.fileButton) {
+controller.fileButtonPush = function (channel, control, value, status, group) {
+    if (controller.fileButton) {
         if (this.modeShifted()) {
             // Shift: load to preview or stop previewing.
             if (engine.getValue('[PreviewDeck1]', "play")) {
@@ -317,10 +407,10 @@ BehringerCMDStudio2a.fileButtonPush = function (channel, control, value, status,
             engine.setValue(group, "LoadSelectedIntoFirstStopped", 1);
         }
     } else {
-        BehringerCMDStudio2a.folderButton = false;
-        midi.sendShortMsg(0x90, 0x25, this.colours.off); // Folder button led OFF
-        BehringerCMDStudio2a.fileButton = true;
-        midi.sendShortMsg(0x90, 0x26, this.colours.on); // File button led ON
+        controller.folderButton = false;
+        midi.sendShortMsg(this.statuses.colour, this.controls.folder, this.colours.off);
+        controller.fileButton = true;
+        midi.sendShortMsg(this.statuses.colour, this.controls.file, this.colours.on);
         // focus on file view
         // Move cursor down one to highlight top track, otherwise there's no
         // visible effect within Mixxx that we've changed view.
@@ -331,8 +421,8 @@ BehringerCMDStudio2a.fileButtonPush = function (channel, control, value, status,
 
 
 // Up button behaviour (folder/file depending)
-BehringerCMDStudio2a.upButtonPush = function (channel, control, value, status, group) {
-    if (BehringerCMDStudio2a.folderButton) { // Folder mode
+controller.upButtonPush = function (channel, control, value, status, group) {
+    if (controller.folderButton) { // Folder mode
         // Act as though mode lock is ON for convenience
         if (!this.modeShift) { // Mode shift is OFF
             engine.setValue(group, "SelectPrevPlaylist", 1);
@@ -356,8 +446,8 @@ BehringerCMDStudio2a.upButtonPush = function (channel, control, value, status, g
 
 
 // Down button behaviour (folder/file depending)
-BehringerCMDStudio2a.downButtonPush = function (channel, control, value, status, group) {
-    if (BehringerCMDStudio2a.folderButton) { // Folder mode
+controller.downButtonPush = function (channel, control, value, status, group) {
+    if (controller.folderButton) { // Folder mode
         // Act as though mode lock is ON for convenience
         if (!this.modeShift) { // Mode shift is OFF
             engine.setValue(group, "SelectNextPlaylist", 1);
@@ -382,10 +472,10 @@ BehringerCMDStudio2a.downButtonPush = function (channel, control, value, status,
 
 // Speed/Loop controls
 // Minus buttons
-BehringerCMDStudio2a.minusButtonPush = function (channel, control, value, status, group) {
+controller.minusButtonPush = function (channel, control, value, status, group) {
     var deck = script.deckFromGroup(group);
 
-    BehringerCMDStudio2a.minusPlusPushed[deck - 1].minus = (value === 127);
+    controller.minusPlusPushed[deck - 1].minus = (value === 127);
 
     if (!this.modeShifted()) {
         // Not mode Shift
@@ -402,7 +492,7 @@ BehringerCMDStudio2a.minusButtonPush = function (channel, control, value, status
             // Speed (tempo) mode
             if (value === 127) {
                 // Button push
-                if (BehringerCMDStudio2a.minusPlusPushed[deck - 1].plus) {
+                if (controller.minusPlusPushed[deck - 1].plus) {
                     // Plus button is pushed too
                     engine.setValue(group, "rate", 0); // Reset slider
                 } else {
@@ -410,7 +500,7 @@ BehringerCMDStudio2a.minusButtonPush = function (channel, control, value, status
                 }
             } else {
                 // Button release
-                BehringerCMDStudio2a.minusPlusPushed[deck - 1].minus = false;
+                controller.minusPlusPushed[deck - 1].minus = false;
                 engine.setValue(group, "rate_temp_down", 0);
             }
         }
@@ -426,10 +516,10 @@ BehringerCMDStudio2a.minusButtonPush = function (channel, control, value, status
 
 
 // Plus buttons
-BehringerCMDStudio2a.plusButtonPush = function (channel, control, value, status, group) {
+controller.plusButtonPush = function (channel, control, value, status, group) {
     var deck = script.deckFromGroup(group);
 
-    BehringerCMDStudio2a.minusPlusPushed[deck - 1].plus = (value === 127);
+    controller.minusPlusPushed[deck - 1].plus = (value === 127);
 
     if (!this.modeShifted()) {
         // Not mode Shift
@@ -446,7 +536,7 @@ BehringerCMDStudio2a.plusButtonPush = function (channel, control, value, status,
             // Speed (tempo) mode
             if (value === 127) {
                 // Button push
-                if (BehringerCMDStudio2a.minusPlusPushed[deck - 1].minus) {
+                if (controller.minusPlusPushed[deck - 1].minus) {
                     // Minus button is pushed too
                     engine.setValue(group, "rate", 0); // Reset slider
                 } else {
@@ -454,7 +544,7 @@ BehringerCMDStudio2a.plusButtonPush = function (channel, control, value, status,
                 }
             } else {
                 // Button release
-                BehringerCMDStudio2a.minusPlusPushed[deck - 1].plus = false;
+                controller.minusPlusPushed[deck - 1].plus = false;
                 engine.setValue(group, "rate_temp_up", 0);
             }
         }
@@ -469,11 +559,11 @@ BehringerCMDStudio2a.plusButtonPush = function (channel, control, value, status,
 
 
 // Hotcue buttons. Edit mode: OFF is 1-4, INTROOUTRO: 5-8.
-BehringerCMDStudio2a.hotCueButtons = function (channel, control, value, status, group) {
+controller.hotCueButtons = function (channel, control, value, status, group) {
     if (value === 127) { // Button pushed
         var deck = script.deckFromGroup(group);
-        // Hotcue buttons on left deck go from 0x0A to 0x0D, on right deck from 0x3A to 0x3D.
-        var button = control - (deck === 1 ? 0x09 : 0x39);
+        var deckName = this.deckNames[deck - 1];
+        var button = control - this.controls[deckName + 'Hotcue1'] + 1;
 
         if (this.editMode[deck - 1] === this.editModes.loop) {
             var beats = this.beatLoops[button - 1];
@@ -506,11 +596,12 @@ BehringerCMDStudio2a.hotCueButtons = function (channel, control, value, status, 
 
 
 // Sample buttons. Depending on edit mode: Used to control samples or the intro/outro markers.
-BehringerCMDStudio2a.sampleButtons = function (channel, control, value, status, group) {
+controller.sampleButtons = function (channel, control, value, status, group) {
     if (value === 127) { // Button pushed
-        var deck = control < 0x13 ? 1 : 2;
-        // Sampler buttons on left deck go from 0x0E to 0x12, on right from 0x3E to 0x41
-        var button = control - (deck === 1 ? 0x0D : 0x3D);
+        // Cant use deckFromGroup as these are all bound to the sampler decks instead.
+        var deck = control <= this.controls.leftSampler4 ? 1 : 2;
+        var deckName = this.deckNames[deck - 1];
+        var button = control - this.controls[deckName + 'Sampler1'] + 1;
         if (button > 2) button--; // Buttons 2-3 have a gap between.
 
         if (this.editMode[deck - 1] === this.editModes.sample) {
@@ -553,7 +644,7 @@ BehringerCMDStudio2a.sampleButtons = function (channel, control, value, status, 
 
 
 // Cue buttons, Mode depending
-BehringerCMDStudio2a.cue = function (channel, control, value, status, group) {
+controller.cue = function (channel, control, value, status, group) {
     if (value === 127 && this.modeShifted()) { // Mode is ON.
             engine.setValue(group, "cue_gotoandstop", 1);
     } else {
@@ -568,10 +659,10 @@ BehringerCMDStudio2a.cue = function (channel, control, value, status, group) {
 // Why is there no (XML) support in Mixxx for this most basic of functions?
 // I suspect the vast majority of controller mappings use the same code
 // (provided in the Wiki).
-BehringerCMDStudio2a.wheelTouch = function (channel, control, value, status, group) {
+controller.wheelTouch = function (channel, control, value, status, group) {
     var deck = script.deckFromGroup(group);
     //channel = channel+1;
-    if (BehringerCMDStudio2a.vinylButton && value > 0) {
+    if (controller.vinylButton && value > 0) {
         // Vinyl button is ON and we touch the wheel.
         var alpha = 1.0/8;
         var beta = alpha/32;
@@ -583,7 +674,7 @@ BehringerCMDStudio2a.wheelTouch = function (channel, control, value, status, gro
 }
 
 
-BehringerCMDStudio2a.wheelTurn = function (channel, control, value, status, group) {
+controller.wheelTurn = function (channel, control, value, status, group) {
     //var deck = channel+1;
     var deck = script.deckFromGroup(group);
     var deck_array = deck-1;
@@ -598,7 +689,7 @@ BehringerCMDStudio2a.wheelTurn = function (channel, control, value, status, grou
 
 
 // Load Deck buttons. Loads to deck, or if mode-shifted clones other deck.
-BehringerCMDStudio2a.loadDeck = function (channel, control, value, status, group) {
+controller.loadDeck = function (channel, control, value, status, group) {
     if (value === 127) { // Button pushed
         var deck = script.deckFromGroup(group);
         if (!this.modeShifted()) {
@@ -612,65 +703,15 @@ BehringerCMDStudio2a.loadDeck = function (channel, control, value, status, group
 
 
 // Some junk to assist in debugging what controls respond to colour codes.
-BehringerCMDStudio2a.debugColour = 0x00;
+controller.debugColour = 0x00;
 
-BehringerCMDStudio2a.debugLEDs = function () {
-    BehringerCMDStudio2a.debugColour++;
-
-// 0x00 off (red)
-// 0x01 on (blue, or green for play)
-// 0x02 blink
-
-    var controls = [
-        0x08, // Assign A A
-        0x09, // Assign A B
-        0x38, // Assign B A
-        0x39, // Assign B B
-        0x01, // Cue A
-        0x31, // Cue B
-        0x02, // Play A
-        0x32, // Play B
-        0x16, // PFL A
-        0x46, // PFL B
-
-        0x22, // vinyl
-        0x23, // mode
-        0x25, // Folder
-        0x26, // File
-        0x24, // Up Button
-        0x27, // Down Button
-
-        0x04, // Sync A
-        0x34, // Sync B
-
-        0x0E, // Sampler A 1
-        0x0F, // Sampler A 2
-        0x11, // Sampler A 3
-        0x12, // Sampler A 4
-        0x3E, // Sampler B 1
-        0x3F, // Sampler B 2
-        0x41, // Sampler B 3
-        0x42, // Sampler B 4
-
-        0x0A, // Hotcue A 1
-        0x0B, // Hotcue A 2
-        0x0C, // Hotcue A 3
-        0x0D, // Hotcue A 4
-        0x3A, // Hotcue B 1
-        0x3B, // Hotcue B 2
-        0x3C, // Hotcue B 3
-        0x3D, // Hotcue B 4
-
-        0x07, // Plus A
-        0x06, // Minus B
-        0x37, // Plus B
-        0x36, // Minus B
-
-        0x17, // Load A
-        0x47, // Load B
-    ];
-
-    controls.forEach(function (control) {
-        midi.sendShortMsg(0x90, control, BehringerCMDStudio2a.debugColour);
-    });
+controller.debugLEDs = function () {
+    this.debugColour++;
+    for (key in this.controls) {
+        if (this.controls.hasOwnProperty(key)) {
+            midi.sendShortMsg(this.statuses.colour, this.controls[key], this.debugColour);
+        }
+    }
 }
+
+})(BehringerCMDStudio2a);
