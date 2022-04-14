@@ -720,6 +720,19 @@ controller.pitchTurn = function (channel, control, value, status, group) {
     }
 }
 
+controller.syncButton = function (channel, control, value, status, group) {
+    var deck = script.deckFromGroup(group);
+    if (status === this.statuses.press) {
+        if (this.modeShifted() ) {
+            engine.setValue(group, "sync_enabled", 0);
+            engine.setValue(group, "rate", 0); // Reset slider
+        } else {
+            engine.setValue(group, "sync_enabled", 1 - engine.getValue(group, "sync_enabled"));
+        }
+    } else if (status === this.statuses.release) {
+    }
+}
+
 // Load Deck buttons. Loads to deck, or if mode-shifted clones other deck.
 controller.loadDeck = function (channel, control, value, status, group) {
     if (value === 127) { // Button pushed
