@@ -311,7 +311,7 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>BehringerCMDStudio2a.syncButton</key>
+                <key>BehringerCMDStudio2a.syncButtonPush</key>
                 <description>Deck A SYNC</description>
                 <status>0x90</status>
                 <midino>0x04</midino>
@@ -321,7 +321,7 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>BehringerCMDStudio2a.syncButton</key>
+                <key>BehringerCMDStudio2a.syncButtonPush</key>
                 <description>Deck A SYNC release</description>
                 <status>0x80</status>
                 <midino>0x04</midino>
@@ -331,7 +331,7 @@
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>BehringerCMDStudio2a.syncButton</key>
+                <key>BehringerCMDStudio2a.syncButtonPush</key>
                 <description>Deck B SYNC</description>
                 <status>0x90</status>
                 <midino>0x34</midino>
@@ -341,7 +341,7 @@
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>BehringerCMDStudio2a.syncButton</key>
+                <key>BehringerCMDStudio2a.syncButtonPush</key>
                 <description>Deck B SYNC release</description>
                 <status>0x80</status>
                 <midino>0x34</midino>

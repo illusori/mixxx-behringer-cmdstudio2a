@@ -722,7 +722,7 @@ controller.pitchTurn = function (channel, control, value, status, group) {
     }
 }
 
-controller.syncButton = function (channel, control, value, status, group) {
+controller.syncButtonPush = function (channel, control, value, status, group) {
     var deck = script.deckFromGroup(group);
     if (status === this.statuses.press) {
         if (this.modeShifted() ) {
