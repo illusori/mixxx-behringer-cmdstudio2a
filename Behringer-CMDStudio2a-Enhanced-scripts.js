@@ -251,6 +251,8 @@ controller.init = function (id, debugging) {
         this.updateEditModeColour(i + 1);
     }
 
+    // FIXME: check pfl modes and init LEDs
+
     this.previewDeckWasOpen = engine.getValue('[PreviewDeck]', 'show_previewdeck');
 
     if (this.preferences.autoKeyLock) {
