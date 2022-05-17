@@ -36,6 +36,16 @@ Personal preference, I use a fader on my headphones, so I find it more useful to
 
 By default the decks now start in vinyl mode, if you'd rather start in CD mode like the original controller mapping you can change the `startInVinylMode` option in the preferences file to `false`.
 
+The *Vinyl* button will toggle between vinyl mode on/off, unless you're mode-shifting, in which case it toggles recording on/off.
+
+### Recording
+
+With mode-shift or mode-lock on, pressing the *Vinyl* button will toggle recording mode.
+
+### Sync Button.
+
+With mode-shift or mode-lock on, pressing the *Sync* button will disable sync lock and reset the deck playback rate to default.
+
 ### Deck Cloning
 
 Load A/Load B work as normal without the mode-shift key active. If you have mode-shift or mode-lock enabled then Load A/Load B will clone the playing track into deck A or B. (Deck cloning loads the cloned deck and sets it playing from the same point/bpm/etc.)

@@ -359,8 +359,13 @@ controller.assignButtonsPush = function (channel, control, value, status, group)
 // Vinyl button ON/OFF
 controller.vinylButtonPush = function (channel, control, value, status, group) {
     if (value === 127) { // Button pushed
-        this.vinylButton = !this.vinylButton; //opposite states
-        this.updateVinylLED();
+        if (this.modeShifted()) {
+            // Toggle recording. Needed to stick this somewhere, and this is easy to remember. For me anyway.
+            engine.setValue("[Recording]", "toggle_recording", 1);
+        } else {
+            this.vinylButton = !this.vinylButton; //opposite states
+            this.updateVinylLED();
+        }
     }
 }
 
