@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<MixxxControllerPreset schemaVersion="1" mixxxVersion="2.0.0+">
+<MixxxControllerPreset schemaVersion="1" mixxxVersion="2.4.0+">
     <info>
         <name>Behringer CMD STUDIO 2a (Enhanced)</name>
         <author>Sam Graham, based on Barney Garrett, LucidityCrash, and Rafael Ferran previous works</author>
-        <description>Controller mapping for the Behringer CMD STUDIO 2a. V 0.2 Created Nov 2020 for Mixxx 2.3.0</description>
+        <description>Controller mapping for the Behringer CMD STUDIO 2a. V 0.3 Created Jul 2023 for Mixxx 2.4.0</description>
         <forums>https://www.mixxx.org/forums/viewtopic.php?f=7&amp;t=9359</forums>
         <wiki>https://www.mixxx.org/wiki/doku.php/behringer_cmd_studio_2a</wiki>
     </info>
@@ -351,7 +351,7 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>BehringerCMDStudio2a.assignButtonsPush</key>
+                <key>BehringerCMDStudio2a.assignAButtonsPush</key>
                 <description>Deck 1, Assign A button</description>
                 <status>0x90</status>
                 <midino>0x08</midino>
@@ -361,17 +361,27 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>reloop_exit</key>
+                <key>BehringerCMDStudio2a.assignBButtonsPush</key>
                 <description>Deck 1, Assign B button</description>
                 <status>0x90</status>
                 <midino>0x09</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.assignBButtonsPush</key>
+                <description>Deck 1, Assign B button release</description>
+                <status>0x80</status>
+                <midino>0x09</midino>
+                <options>
+                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>BehringerCMDStudio2a.assignButtonsPush</key>
+                <key>BehringerCMDStudio2a.assignAButtonsPush</key>
                 <description>Deck 2, Assign A button</description>
                 <status>0x90</status>
                 <midino>0x38</midino>
@@ -381,12 +391,22 @@
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>reloop_exit</key>
+                <key>BehringerCMDStudio2a.assignBButtonsPush</key>
                 <description>Deck 2, Assign B button</description>
                 <status>0x90</status>
                 <midino>0x39</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.assignBButtonsPush</key>
+                <description>Deck 2, Assign B button release</description>
+                <status>0x80</status>
+                <midino>0x39</midino>
+                <options>
+                    <script-binding/>
                 </options>
             </control>
             <control>

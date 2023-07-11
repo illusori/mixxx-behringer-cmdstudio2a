@@ -1,7 +1,7 @@
 // ****************************************************************************
 // * Mixxx mapping script file for the Behringer CMD Studio 2a.
 // * Author: Sam Graham, based on Rafael Ferran, Barney Garrett and Xxx previous works
-// * Version 0.2 (Nov 2020)
+// * Version 0.3 (Jul 2023)
 // * Forum: http://www.mixxx.org/forums/viewtopic.php?f=7&amp;t=7868
 // * Wiki: http://www.mixxx.org/wiki/doku.php/behringer_cmd_studio_4a
 // ****************************************************************************
@@ -90,6 +90,9 @@ controller.vinylButton = false;
 
 // Status: pushed/not pushed of minus and plus buttons.
 controller.minusPlusPushed = [{ plus: false, minus: false }, { plus: false, minus: false }];
+
+// Status: pushed/not pushed of assign B buttons.
+controller.assignBState = [{ pushed: false, ignoreRelease: false, timer: null }, { pushed: false, ignoreRelease: false, timer: null }];
 
 // File and Folder buttons for library navigation
 controller.folderButton = true; // Default is ON
@@ -342,7 +345,7 @@ controller.cycleEditMode = function (deck) {
 }
 
 // Assign A button: cycle through edit modes: OFF/MODE1/MODE2
-controller.assignButtonsPush = function (channel, control, value, status, group) {
+controller.assignAButtonsPush = function (channel, control, value, status, group) {
     if (value === 127) {
         // Button pushed
         if (this.debug) {
@@ -352,6 +355,39 @@ controller.assignButtonsPush = function (channel, control, value, status, group)
             this.cycleEditMode(deck);
         }
     }
+}
+
+// Assign B button:
+//   PRESS:       toggle loop
+//   shift+PRESS: remove loop
+//   HOLD+hotcue: save to loop hotcue if unset, load from hotcue if set
+controller.assignBButtonsPush = function (channel, control, value, status, group) {
+    var deck = script.deckFromGroup(group);
+    var buttonState = this.assignBState[deck - 1];
+
+    buttonState.pushed = (value === 127);
+    if (value === 127) { // Button pushed
+        buttonState.ignoreRelease = false;
+        // set delay timer to set ignoreRelease after 500ms
+        buttonState.timer = engine.beginTimer(500, function () {
+            buttonState.ignoreRelease = true;
+            engine.stopTimer(buttonState.timer);
+            buttonState.timer = null;
+        });
+    } else {
+        if (!buttonState.ignoreRelease) {
+            if (this.modeShifted()) {
+                engine.setValue(group, "loop_remove", 1);
+            } else {
+                engine.setValue(group, "reloop_toggle", 1);
+            }
+        }
+        if (buttonState.timer) {
+            engine.stopTimer(buttonState.timer);
+            buttonState.timer = null;
+        }
+    }
+    buttonState.ignoreRelease = false;
 }
 
 
@@ -585,8 +621,24 @@ controller.hotCueButtons = function (channel, control, value, status, group) {
         var deck = script.deckFromGroup(group);
         var deckName = this.deckNames[deck - 1];
         var button = control - this.controls[deckName + 'Hotcue1'] + 1;
+        var bState = this.assignBState[deck - 1];
 
-        if (this.editMode[deck - 1] === this.editModes.loop) {
+        if (bState.pushed) {
+            // Loop button (Assign B) is held.
+            //   SHIFT: clear hotcue
+            //   set:   activate loop from hotcue
+            //   unset: save loop to hotcue
+            if (!this.modeShifted()) {
+                if (engine.getValue(group, "hotcue_" + button + "_status")) {
+                    engine.setValue(group, "hotcue_" + button + "_activateloop", 1);
+                } else {
+                    engine.setValue(group, "hotcue_" + button + "_setloop", 1);
+                }
+            } else {
+                engine.setValue(group, "hotcue_" + button + "_clear", 1);
+            }
+            bState.ignoreRelease = true;
+        } else if (this.editMode[deck - 1] === this.editModes.loop) {
             var beats = this.beatLoops[button - 1];
             if (!this.modeShifted()) {
                 // Not mode Shift

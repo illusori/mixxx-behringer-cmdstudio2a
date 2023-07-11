@@ -1,8 +1,12 @@
-# Behringer CMD Studio 2a controller
+# Behringer CMD Studio 2a controller, version 0.3 (July 2023)
 
 Updated controller mappings for Mixxx for the Behringer CMD Studio 2a controller.
 
 Placeholder repo until I update it for merge to upstream.
+
+## New in 0.3 (July 2023)
+
+* Loop saving controls. (Requires Mixxx 2.4 or greater.)
 
 # Control scheme
 
@@ -41,6 +45,8 @@ The *Vinyl* button will toggle between vinyl mode on/off, unless you're mode-shi
 ### Recording
 
 With mode-shift or mode-lock on, pressing the *Vinyl* button will toggle recording mode.
+
+This keybind doesn't make a whole lotta logical sense, but I wanted to have recording toggleable from just the controller and this was the least-confusing place to put it.
 
 ### Sync Button.
 
@@ -95,3 +101,14 @@ This is the default behaviour from the old controller mapping.
 Intent of this mode is to help you prepare or cue up a track.
 
 How you make use of the hotcues is up to you, but I like to stick the start/end of the beat or the melody (whichever makes sense for the track) on hotcue 5 and 7, and colour them Green for Groove; then stick start/end vocals on 6 and 8, colouring them Violet for Vocals.
+
+### Assign B button
+
+The *Assign B* button is your loop enable/disable/remove and save/load button.
+
+* Press once to toggle whether your current loop is enabled or disabled.
+* With mode-shift or mode-lock active *Assign B* will delete the current loop.
+* If you hold *Assign B* down, pressing the hotcue 1-4 buttons will save the current loop to the hotcue or load it if one is already saved.
+* Holding *Assign B* while mode-shifted or mode-locked and pressing hotcue 1-4 will clear the hotcue. This finger-twister is provided to preserve expected button combo behaviours, but you may find it easier to just use the regular hotcue clearing controls from within sample editing mode.
+
+For simplicity, hotcues 5-8 aren't reachable for now to save loops to. This may change in a future version.
