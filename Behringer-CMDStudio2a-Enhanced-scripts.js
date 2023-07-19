@@ -1,7 +1,7 @@
 // ****************************************************************************
 // * Mixxx mapping script file for the Behringer CMD Studio 2a.
 // * Author: Sam Graham, based on Rafael Ferran, Barney Garrett and Xxx previous works
-// * Version 0.3 (Jul 2023)
+// * Version 0.3.1 (Jul 2023)
 // * Forum: http://www.mixxx.org/forums/viewtopic.php?f=7&amp;t=7868
 // * Wiki: http://www.mixxx.org/wiki/doku.php/behringer_cmd_studio_4a
 // ****************************************************************************
