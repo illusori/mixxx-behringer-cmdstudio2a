@@ -422,8 +422,28 @@
             <control>
                 <group>[Channel1]</group>
                 <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck A, hotcue button 1 release</description>
+                <status>0x80</status>
+                <midino>0x0A</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
                 <description>Deck A, hotcue button 2</description>
                 <status>0x90</status>
+                <midino>0x0B</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck A, hotcue button 2 release</description>
+                <status>0x80</status>
                 <midino>0x0B</midino>
                 <options>
                     <script-binding/>
@@ -442,8 +462,28 @@
             <control>
                 <group>[Channel1]</group>
                 <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck A, hotcue button 3 release</description>
+                <status>0x80</status>
+                <midino>0x0C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
                 <description>Deck A, hotcue button 4</description>
                 <status>0x90</status>
+                <midino>0x0D</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel1]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck A, hotcue button 4 release</description>
+                <status>0x80</status>
                 <midino>0x0D</midino>
                 <options>
                     <script-binding/>
@@ -462,8 +502,28 @@
             <control>
                 <group>[Channel2]</group>
                 <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck B, hotcue button 1 release</description>
+                <status>0x80</status>
+                <midino>0x3A</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
                 <description>Deck B, hotcue button 2</description>
                 <status>0x90</status>
+                <midino>0x3B</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck B, hotcue button 2 release</description>
+                <status>0x80</status>
                 <midino>0x3B</midino>
                 <options>
                     <script-binding/>
@@ -482,8 +542,28 @@
             <control>
                 <group>[Channel2]</group>
                 <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck B, hotcue button 3 release</description>
+                <status>0x80</status>
+                <midino>0x3C</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
                 <description>Deck B, hotcue button 4</description>
                 <status>0x90</status>
+                <midino>0x3D</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Channel2]</group>
+                <key>BehringerCMDStudio2a.hotCueButtons</key>
+                <description>Deck B, hotcue button 4 release</description>
+                <status>0x80</status>
                 <midino>0x3D</midino>
                 <options>
                     <script-binding/>
@@ -500,10 +580,30 @@
                 </options>
             </control>
             <control>
+                <group>[Sampler1]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 1, Intro Start release</description>
+                <status>0x80</status>
+                <midino>0x0E</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Sampler2]</group>
                 <key>BehringerCMDStudio2a.sampleButtons</key>
                 <description>Bank 1, Intro End</description>
                 <status>0x90</status>
+                <midino>0x0F</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler2]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 1, Intro End release</description>
+                <status>0x80</status>
                 <midino>0x0F</midino>
                 <options>
                     <script-binding/>
@@ -520,10 +620,30 @@
                 </options>
             </control>
             <control>
+                <group>[Sampler3]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 1, Outro Start release</description>
+                <status>0x80</status>
+                <midino>0x11</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Sampler4]</group>
                 <key>BehringerCMDStudio2a.sampleButtons</key>
                 <description>Bank 1, Outro End</description>
                 <status>0x90</status>
+                <midino>0x12</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler4]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 1, Outro End release</description>
+                <status>0x80</status>
                 <midino>0x12</midino>
                 <options>
                     <script-binding/>
@@ -540,10 +660,30 @@
                 </options>
             </control>
             <control>
+                <group>[Sampler5]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 2, Intro Start release</description>
+                <status>0x80</status>
+                <midino>0x3E</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Sampler6]</group>
                 <key>BehringerCMDStudio2a.sampleButtons</key>
                 <description>Bank 2, Intro End</description>
                 <status>0x90</status>
+                <midino>0x3F</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler6]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 2, Intro End release</description>
+                <status>0x80</status>
                 <midino>0x3F</midino>
                 <options>
                     <script-binding/>
@@ -560,10 +700,30 @@
                 </options>
             </control>
             <control>
+                <group>[Sampler7]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 2, Outro Start release</description>
+                <status>0x80</status>
+                <midino>0x41</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
                 <group>[Sampler8]</group>
                 <key>BehringerCMDStudio2a.sampleButtons</key>
                 <description>Bank 2, Outro End</description>
                 <status>0x90</status>
+                <midino>0x42</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+            <control>
+                <group>[Sampler8]</group>
+                <key>BehringerCMDStudio2a.sampleButtons</key>
+                <description>Bank 2, Outro End release</description>
+                <status>0x80</status>
                 <midino>0x42</midino>
                 <options>
                     <script-binding/>

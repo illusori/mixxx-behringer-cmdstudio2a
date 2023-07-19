@@ -617,12 +617,12 @@ controller.plusButtonPush = function (channel, control, value, status, group) {
 
 // Hotcue buttons. Edit mode: OFF is 1-4, INTROOUTRO: 5-8.
 controller.hotCueButtons = function (channel, control, value, status, group) {
-    if (value === 127) { // Button pushed
-        var deck = script.deckFromGroup(group);
-        var deckName = this.deckNames[deck - 1];
-        var button = control - this.controls[deckName + 'Hotcue1'] + 1;
-        var bState = this.assignBState[deck - 1];
+    var deck = script.deckFromGroup(group);
+    var deckName = this.deckNames[deck - 1];
+    var button = control - this.controls[deckName + 'Hotcue1'] + 1;
+    var bState = this.assignBState[deck - 1];
 
+    if (value === this.values.press) { // Button pushed
         if (bState.pushed) {
             // Loop button (Assign B) is held.
             //   SHIFT: clear hotcue
@@ -664,19 +664,29 @@ controller.hotCueButtons = function (channel, control, value, status, group) {
                 engine.setValue(group, "hotcue_"+button+"_clear", 1);
             }
         }
+    } else {
+        // hotcue release
+        if (!bState.pushed && this.editMode[deck - 1] !== this.editModes.loop && !this.modeShifted()) {
+            // Edit mode SAMPLE: use hotcues 1-4
+            // Edit mode INTROOUTRO: use hotcues 5-8
+            if (this.editMode[deck - 1] === this.editModes.introoutro) {
+                button += 4;
+            }
+            engine.setValue(group, "hotcue_"+button+"_activate", 0);
+        }
     }
 }
 
 
 // Sample buttons. Depending on edit mode: Used to control samples or the intro/outro markers.
 controller.sampleButtons = function (channel, control, value, status, group) {
-    if (value === 127) { // Button pushed
-        // Cant use deckFromGroup as these are all bound to the sampler decks instead.
-        var deck = control <= this.controls.leftSampler4 ? 1 : 2;
-        var deckName = this.deckNames[deck - 1];
-        var button = control - this.controls[deckName + 'Sampler1'] + 1;
-        if (button > 2) button--; // Buttons 2-3 have a gap between.
+    // Cant use deckFromGroup as these are all bound to the sampler decks instead.
+    var deck = control <= this.controls.leftSampler4 ? 1 : 2;
+    var deckName = this.deckNames[deck - 1];
+    var button = control - this.controls[deckName + 'Sampler1'] + 1;
+    if (button > 2) button--; // Buttons 2-3 have a gap between.
 
+    if (value === this.values.press) { // Button pushed
         if (this.editMode[deck - 1] === this.editModes.sample) {
             // Edit mode SAMPLE: play samples
 
@@ -789,6 +799,7 @@ controller.syncButtonPush = function (channel, control, value, status, group) {
             engine.setValue(group, "sync_enabled", 1 - engine.getValue(group, "sync_enabled"));
         }
     } else if (status === this.statuses.release) {
+// FIXME: hold for sync lock
     }
 }
 
