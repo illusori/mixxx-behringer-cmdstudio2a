@@ -259,8 +259,8 @@ controller.init = function (id, debugging) {
     this.previewDeckWasOpen = engine.getValue('[PreviewDeck]', 'show_previewdeck');
 
     if (this.preferences.autoKeyLock) {
-        this.connections.push(engine.makeConnection('[Channel1]', 'rate', this.rateChanged));
-        this.connections.push(engine.makeConnection('[Channel2]', 'rate', this.rateChanged));
+        this.connections.push(engine.makeConnection('[Channel1]', 'rate', this.rateChanged.bind(this)));
+        this.connections.push(engine.makeConnection('[Channel2]', 'rate', this.rateChanged.bind(this)));
     }
 }
 
@@ -799,7 +799,6 @@ controller.syncButtonPush = function (channel, control, value, status, group) {
             engine.setValue(group, "sync_enabled", 1 - engine.getValue(group, "sync_enabled"));
         }
     } else if (status === this.statuses.release) {
-// FIXME: hold for sync lock
     }
 }
 
