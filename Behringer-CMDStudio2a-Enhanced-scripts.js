@@ -1,7 +1,7 @@
 // ****************************************************************************
 // * Mixxx mapping script file for the Behringer CMD Studio 2a.
 // * Author: Sam Graham, based on Rafael Ferran, Barney Garrett and Xxx previous works
-// * Version 0.3.1 (Jul 2023)
+// * Version 0.3.2 (Jul 2023)
 // * Forum: http://www.mixxx.org/forums/viewtopic.php?f=7&amp;t=7868
 // * Wiki: http://www.mixxx.org/wiki/doku.php/behringer_cmd_studio_4a
 // ****************************************************************************
@@ -106,7 +106,9 @@ controller.editMode = [controller.editModes.red, controller.editModes.red];
 
 // This is an odd order because they're aligned vertically not in the button order.
 // This is so that 1/8 to 1 are on the left and 2 to 16 are on the right.
-controller.beatLoops = [0.125, 2, 0.25, 4, 0.5, 8, 1, 16];
+controller.beatLoops = (function (beatLoops) {
+    return [0, 4, 1, 5, 2, 6, 3, 7].map(function (idx) { return beatLoops[idx]; });
+})(controller.preferences.beatLoops || [0.125, 0.25, 0.5, 1, 2, 4, 8, 16]);
 
 // Set to true and each "Assign A" button press will cycle all controls to the next colour code.
 // So you can debug what controls respond to colour.

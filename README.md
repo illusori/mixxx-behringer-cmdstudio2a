@@ -1,4 +1,4 @@
-# Behringer CMD Studio 2a controller, version 0.3 (July 2023)
+# Behringer CMD Studio 2a controller, version 0.3.2 (July 2023)
 
 Updated controller mappings for Mixxx for the Behringer CMD Studio 2a controller.
 
@@ -92,6 +92,8 @@ This is the default behaviour from the old controller mapping.
 * Assign B toggles loop enabled. (This applies to all modes, not just loop editing mode.)
 * Plus/minus control loop in/loop out markers.
 * The hotcue buttons and sample buttons become beatloop buttons, or when you mode-shift with the mode button they will alter the beatjump size instead. From the top: fractional beats on the left from 1/8 to 1, and multiple-beat loops on the right from 2 to 16.
+
+If you wish to have a different range of durations to bind for the beatloops you can edit the `beatLoops` property in the preferences file.
 
 #### Intro-Outro editing mode (aka: "prepare" mode)
 

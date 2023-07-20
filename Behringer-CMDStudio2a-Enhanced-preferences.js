@@ -30,4 +30,7 @@ var BehringerCMDStudio2aPreferences = {
 
     // Whether to automatically enable/disable keylock during rate changes.
     autoKeyLock: true,
+
+    // Size of beat loops to have assigned to the pads in loop edit mode.
+    beatLoops: [0.125, 0.25, 0.5, 1, 2, 4, 8, 16],
 };
