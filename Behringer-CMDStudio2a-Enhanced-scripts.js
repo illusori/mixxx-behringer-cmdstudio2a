@@ -256,7 +256,21 @@ controller.init = function (id, debugging) {
         this.updateEditModeColour(i + 1);
     }
 
-    // FIXME: check pfl modes and init LEDs
+    // check pfl modes and init LEDs
+    if (engine.getValue('[Channel1]', 'pfl')) {
+        midi.sendShortMsg(this.statuses.colour, this.controls.leftPfl, this.colours.on);
+    }
+    if (engine.getValue('[Channel2]', 'pfl')) {
+        midi.sendShortMsg(this.statuses.colour, this.controls.rightPfl, this.colours.on);
+    }
+
+    // check loop modes and init LEDs
+    if (engine.getValue('[Channel1]', 'loop_enabled')) {
+        midi.sendShortMsg(this.statuses.colour, this.controls.leftB, this.colours.on);
+    }
+    if (engine.getValue('[Channel2]', 'loop_enabled')) {
+        midi.sendShortMsg(this.statuses.colour, this.controls.rightB, this.colours.on);
+    }
 
     this.previewDeckWasOpen = engine.getValue('[PreviewDeck]', 'show_previewdeck');
 
