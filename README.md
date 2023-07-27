@@ -1,4 +1,4 @@
-# Behringer CMD Studio 2a controller, version 0.3.2 (July 2023)
+# Behringer CMD Studio 2a controller, version 0.3.3 (July 2023)
 
 Updated controller mappings for Mixxx for the Behringer CMD Studio 2a controller.
 
