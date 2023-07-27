@@ -7,6 +7,7 @@ Placeholder repo until I update it for merge to upstream.
 ## New in 0.3 (July 2023)
 
 * Loop saving controls. (Requires Mixxx 2.4 or greater.)
+* Fader start.
 
 # Control scheme
 
@@ -114,3 +115,9 @@ The *Assign B* button is your loop enable/disable/remove and save/load button.
 * Holding *Assign B* while mode-shifted or mode-locked and pressing hotcue 1-4 will clear the hotcue. This finger-twister is provided to preserve expected button combo behaviours, but you may find it easier to just use the regular hotcue clearing controls from within sample editing mode.
 
 For simplicity, hotcues 5-8 aren't reachable for now to save loops to. This may change in a future version.
+
+### Fader Start
+
+With mode-shift active the channel faders will behave in "fader start/stop" mode, where fading up from a zero position will start the track playing from the current position, and fading down to zero will stop the track and return to the cue point.
+
+If you just want the track to stop at the current position on fader stop, the `faderStopGotoCue` setting can be set to `false` in your preferences file.

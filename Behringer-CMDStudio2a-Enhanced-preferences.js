@@ -37,4 +37,7 @@ var BehringerCMDStudio2aPreferences = {
     // How long to hold the assignB button to indicate you intended to use it as a layer/shift
     // button but changed your mind, so that the loop toggle press action doesn't happen on release.
     assignBOoopsTime: 500, // in milliseconds
+
+    // Should fader-stopping (shift+fader down) reset to the cue point after stopping?
+    faderStopGotoCue: true,
 };

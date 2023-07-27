@@ -7,9 +7,9 @@
 // ****************************************************************************
 
 // TODOs:
-//   * fader start (shift+fader up: start track, shift+fader down: move to cue)
 //   * quantize toggle (shift+pfl seems common)
-//   * headphone level (shift+headphone), swap shift behaviour in prefs, soft-takeover
+//   * headphone gain level (shift+headphone), swap shift behaviour in prefs, soft-takeover
+//   * master gain level (shift deck A high, soft-takeover)
 //   * change plusminus to only move loopin/loopout if loop button held?
 
 ////////////////////////////////////////////////////////////////////////
@@ -71,6 +71,9 @@ var BehringerCMDStudio2aPreferenceDefaults = {
     // How long to hold the assignB button to indicate you intended to use it as a layer/shift
     // button but changed your mind, so that the loop toggle press action doesn't happen on release.
     assignBOoopsTime: 500, // in milliseconds
+
+    // Should fader-stopping (shift+fader down) reset to the cue point after stopping?
+    faderStopGotoCue: true,
 };
 
 controller.preferences = {};
@@ -828,6 +831,23 @@ controller.syncButtonPush = function (channel, control, value, status, group) {
             engine.setValue(group, "sync_enabled", 1 - engine.getValue(group, "sync_enabled"));
         }
     } else if (status === this.statuses.release) {
+    }
+}
+
+controller.volumeFader = function (channel, control, value, status, group) {
+    var deck = script.deckFromGroup(group);
+
+    engine.setValue(group, "volume", value / 0x7f);
+    if (this.modeShift) {
+        if (value === 0) {
+            if (this.preferences.faderStopGotoCue) {
+                engine.setValue(group, "cue_gotoandstop", true);
+            } else {
+                engine.setValue(group, "stop", true);
+            }
+        } else {
+            engine.setValue(group, "play", true);
+        }
     }
 }
 

@@ -107,21 +107,23 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>volume</key>
+                <key>BehringerCMDStudio2a.volumeFader</key>
                 <description>Deck A Fader.</description>
                 <status>0xB0</status>
                 <midino>0x18</midino>
                 <options>
+                    <script-binding/>
                     <soft-takeover/>
                 </options>
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>volume</key>
+                <key>BehringerCMDStudio2a.volumeFader</key>
                 <description>Deck B Fader.</description>
                 <status>0xB0</status>
                 <midino>0x48</midino>
                 <options>
+                    <script-binding/>
                     <soft-takeover/>
                 </options>
             </control>
