@@ -6,6 +6,12 @@
 // * Wiki: http://www.mixxx.org/wiki/doku.php/behringer_cmd_studio_4a
 // ****************************************************************************
 
+// TODOs:
+//   * fader start (shift+fader up: start track, shift+fader down: move to cue)
+//   * quantize toggle (shift+pfl seems common)
+//   * headphone level (shift+headphone), swap shift behaviour in prefs, soft-takeover
+//   * change plusminus to only move loopin/loopout if loop button held?
+
 ////////////////////////////////////////////////////////////////////////
 // JSHint configuration                                               //
 ////////////////////////////////////////////////////////////////////////
@@ -58,6 +64,13 @@ var BehringerCMDStudio2aPreferenceDefaults = {
 
     // Whether to automatically enable/disable keylock during rate changes.
     autoKeyLock: true,
+
+    // Size of beat loops to have assigned to the pads in loop edit mode.
+    beatLoops: [0.125, 0.25, 0.5, 1, 2, 4, 8, 16],
+
+    // How long to hold the assignB button to indicate you intended to use it as a layer/shift
+    // button but changed your mind, so that the loop toggle press action doesn't happen on release.
+    assignBOoopsTime: 500, // in milliseconds
 };
 
 controller.preferences = {};
@@ -108,7 +121,7 @@ controller.editMode = [controller.editModes.red, controller.editModes.red];
 // This is so that 1/8 to 1 are on the left and 2 to 16 are on the right.
 controller.beatLoops = (function (beatLoops) {
     return [0, 4, 1, 5, 2, 6, 3, 7].map(function (idx) { return beatLoops[idx]; });
-})(controller.preferences.beatLoops || [0.125, 0.25, 0.5, 1, 2, 4, 8, 16]);
+})(controller.preferences.beatLoops);
 
 // Set to true and each "Assign A" button press will cycle all controls to the next colour code.
 // So you can debug what controls respond to colour.
@@ -384,8 +397,8 @@ controller.assignBButtonsPush = function (channel, control, value, status, group
     buttonState.pushed = (value === 127);
     if (value === 127) { // Button pushed
         buttonState.ignoreRelease = false;
-        // set delay timer to set ignoreRelease after 500ms
-        buttonState.timer = engine.beginTimer(500, function () {
+        // set delay timer to set ignoreRelease after 500ms (configurable)
+        buttonState.timer = engine.beginTimer(this.preferences.assignBOoopsTime, function () {
             buttonState.ignoreRelease = true;
             engine.stopTimer(buttonState.timer);
             buttonState.timer = null;
@@ -767,7 +780,7 @@ controller.wheelTouch = function (channel, control, value, status, group) {
         var beta = alpha/32;
         engine.scratchEnable(deck, 128, 33+1/3, alpha, beta);
     } else {
-        // Vinyl button is OFF.
+        // Vinyl button is OFF or releasing wheel.
         engine.scratchDisable(deck);
     }
 }

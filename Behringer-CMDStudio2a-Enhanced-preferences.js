@@ -33,4 +33,8 @@ var BehringerCMDStudio2aPreferences = {
 
     // Size of beat loops to have assigned to the pads in loop edit mode.
     beatLoops: [0.125, 0.25, 0.5, 1, 2, 4, 8, 16],
+
+    // How long to hold the assignB button to indicate you intended to use it as a layer/shift
+    // button but changed your mind, so that the loop toggle press action doesn't happen on release.
+    assignBOoopsTime: 500, // in milliseconds
 };
