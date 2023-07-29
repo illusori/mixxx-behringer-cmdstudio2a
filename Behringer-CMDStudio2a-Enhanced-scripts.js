@@ -7,7 +7,6 @@
 // ****************************************************************************
 
 // TODOs:
-//   * headphone gain level (shift+headphone), swap shift behaviour in prefs, soft-takeover
 //   * master gain level (shift deck A high, soft-takeover)
 //   * change plusminus to only move loopin/loopout if loop button held?
 
@@ -73,6 +72,9 @@ var BehringerCMDStudio2aPreferenceDefaults = {
 
     // Should fader-stopping (shift+fader down) reset to the cue point after stopping?
     faderStopGotoCue: true,
+
+    // Whether the unshifted behaviour of the headphones knob should be head gain or head mix
+    headGainIsDefault: true,
 };
 
 controller.preferences = {};
@@ -293,6 +295,11 @@ controller.init = function (id, debugging) {
         this.connections.push(engine.makeConnection('[Channel1]', 'rate', this.rateChanged.bind(this)));
         this.connections.push(engine.makeConnection('[Channel2]', 'rate', this.rateChanged.bind(this)));
     }
+
+    engine.softTakeover("[Master]", "headGain", true);
+    engine.softTakeover("[Master]", "headMix", true);
+    engine.softTakeover("[Channel1]", "volume", true);
+    engine.softTakeover("[Channel2]", "volume", true);
 }
 
 controller.shutdown = function () {
@@ -857,6 +864,25 @@ controller.volumeFader = function (channel, control, value, status, group) {
         } else {
             engine.setValue(group, "play", true);
         }
+    }
+}
+
+controller.headKnob = function (channel, control, value, status, group) {
+    var isGain = (this.modeShift != this.preferences.headGainIsDefault);
+    var newValue = value / 0x7f;
+    if (isGain) {
+        engine.softTakeoverIgnoreNextValue("[Master]", "headMix");
+        if (newValue <= 0.5) {
+            engine.setValue("[Master]", "headGain", newValue * 2);
+        } else {
+            // above the midpoint the gain knob goes from 1 to 5(ish)?
+            // TOOD: this doesn't feel quite right near the centre, I think there's a
+            //       log scale thing going on, but it's not documented.
+            engine.setValue("[Master]", "headGain", ((newValue - 0.5) * 2 * 4) + 1);
+        }
+    } else {
+        engine.softTakeoverIgnoreNextValue("[Master]", "headGain");
+        engine.setValue("[Master]", "headMix", (newValue * 2) - 1);
     }
 }
 

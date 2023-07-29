@@ -34,9 +34,9 @@ In vinyl mode the top of the jog wheels enable scratching, and when MODE SHIFTED
 
 You can also edit the jog wheel sensitivity in the preferences file if you need to.
 
-### Headphone Volume is Headphone Mix
+### Headphone Volume and Headphone Mix
 
-Personal preference, I use a fader on my headphones, so I find it more useful to have the Headphone Volume knob control the Headphone Mix instead. You can set this back in the bindings. As of yet you can't set this within the preferences file.
+The headphone knob controls headphone volume/gain by default, and when mode-shifted controls the headphone mix. If you'd prefer to swap these behaviours then change the `headGainIsDefault` value to `false` in the preferences file.
 
 ### Vinyl Mode
 

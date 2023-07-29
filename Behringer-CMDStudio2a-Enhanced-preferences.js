@@ -40,4 +40,7 @@ var BehringerCMDStudio2aPreferences = {
 
     // Should fader-stopping (shift+fader down) reset to the cue point after stopping?
     faderStopGotoCue: true,
+
+    // Whether the unshifted behaviour of the headphones knob should be head gain or head mix
+    headGainIsDefault: true,
 };

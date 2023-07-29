@@ -15,14 +15,12 @@
         <controls>
             <control>
                 <group>[Master]</group>
-                <!--<key>headGain</key>
-                <description>Headphone Volume</description>-->
-                <key>headMix</key>
-                <description>Headphone Mix</description>
+                <key>BehringerCMDStudio2a.headKnob</key>
+                <description>Headphone knob</description>
                 <status>0xB0</status>
                 <midino>0x21</midino>
                 <options>
-                    <soft-takeover/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
@@ -113,7 +111,6 @@
                 <midino>0x18</midino>
                 <options>
                     <script-binding/>
-                    <soft-takeover/>
                 </options>
             </control>
             <control>
@@ -124,7 +121,6 @@
                 <midino>0x48</midino>
                 <options>
                     <script-binding/>
-                    <soft-takeover/>
                 </options>
             </control>
             <control>
