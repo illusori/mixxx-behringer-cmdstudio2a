@@ -7,7 +7,6 @@
 // ****************************************************************************
 
 // TODOs:
-//   * quantize toggle (shift+pfl seems common)
 //   * headphone gain level (shift+headphone), swap shift behaviour in prefs, soft-takeover
 //   * master gain level (shift deck A high, soft-takeover)
 //   * change plusminus to only move loopin/loopout if loop button held?
@@ -756,15 +755,25 @@ controller.sampleButtons = function (channel, control, value, status, group) {
     }
 }
 
+// pfl/"cue a/b" buttons
+controller.pflButtonPush = function (channel, control, value, status, group) {
+    if (value === this.values.press) {
+        if (!this.modeShifted()) { // Mode shift is OFF
+            engine.setValue(group, "pfl", 1 - engine.getValue(group, 'pfl'));
+        } else { // Mode shift is ON
+            engine.setValue(group, "quantize", 1 - engine.getValue(group, 'quantize'));
+        }
+    }
+}
 
 
 // Cue buttons, Mode depending
 controller.cue = function (channel, control, value, status, group) {
     if (value === 127 && this.modeShifted()) { // Mode is ON.
-            engine.setValue(group, "cue_gotoandstop", 1);
+        engine.setValue(group, "cue_gotoandstop", 1);
     } else {
-            // Mode is OFF.
-            engine.setValue(group, "cue_default", (value == 127) ? 1 : 0);
+        // Mode is OFF.
+        engine.setValue(group, "cue_default", (value == 127) ? 1 : 0);
     }
 }
 

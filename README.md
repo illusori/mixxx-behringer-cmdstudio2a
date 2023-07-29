@@ -8,6 +8,7 @@ Placeholder repo until I update it for merge to upstream.
 
 * Loop saving controls. (Requires Mixxx 2.4 or greater.)
 * Fader start.
+* Quantize.
 
 # Control scheme
 
@@ -121,3 +122,7 @@ For simplicity, hotcues 5-8 aren't reachable for now to save loops to. This may 
 With mode-shift active the channel faders will behave in "fader start/stop" mode, where fading up from a zero position will start the track playing from the current position, and fading down to zero will stop the track and return to the cue point.
 
 If you just want the track to stop at the current position on fader stop, the `faderStopGotoCue` setting can be set to `false` in your preferences file.
+
+### Quantize
+
+You can toggle quantize for a deck with mode-shift + pfl (the "cue a" and "cue b" buttons). This binding doesn't have a handy mnemonic, but it seems to be used in a few other controller bindings - so I shamelessly borrowed it from there.

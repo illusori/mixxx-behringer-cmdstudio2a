@@ -87,22 +87,22 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>pfl</key>
+                <key>BehringerCMDStudio2a.pflButtonPush</key>
                 <description>Deck A PFL</description>
                 <status>0x90</status>
                 <midino>0x16</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>pfl</key>
+                <key>BehringerCMDStudio2a.pflButtonPush</key>
                 <description>Deck B PFL</description>
                 <status>0x90</status>
                 <midino>0x46</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
