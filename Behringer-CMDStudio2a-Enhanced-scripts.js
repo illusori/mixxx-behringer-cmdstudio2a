@@ -855,6 +855,7 @@ controller.volumeFader = function (channel, control, value, status, group) {
 
     engine.setValue(group, "volume", value / 0x7f);
     if (this.modeShift) {
+        // Fader-start/stop
         if (value === 0) {
             if (this.preferences.faderStopGotoCue) {
                 engine.setValue(group, "cue_gotoandstop", true);
@@ -869,20 +870,12 @@ controller.volumeFader = function (channel, control, value, status, group) {
 
 controller.headKnob = function (channel, control, value, status, group) {
     var isGain = (this.modeShift != this.preferences.headGainIsDefault);
-    var newValue = value / 0x7f;
     if (isGain) {
         engine.softTakeoverIgnoreNextValue("[Master]", "headMix");
-        if (newValue <= 0.5) {
-            engine.setValue("[Master]", "headGain", newValue * 2);
-        } else {
-            // above the midpoint the gain knob goes from 1 to 5(ish)?
-            // TOOD: this doesn't feel quite right near the centre, I think there's a
-            //       log scale thing going on, but it's not documented.
-            engine.setValue("[Master]", "headGain", ((newValue - 0.5) * 2 * 4) + 1);
-        }
+        engine.setValue("[Master]", "headGain", script.absoluteNonLin(value, 0, 1, 5, 0, 0x7f));
     } else {
         engine.softTakeoverIgnoreNextValue("[Master]", "headGain");
-        engine.setValue("[Master]", "headMix", (newValue * 2) - 1);
+        engine.setValue("[Master]", "headMix", script.absoluteLin(value, -1, 1, 0, 0x7f));
     }
 }
 
