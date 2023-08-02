@@ -1,14 +1,15 @@
-# Behringer CMD Studio 2a controller, version 0.3.3 (July 2023)
+# Behringer CMD Studio 2a controller, version 0.4.0 (Aug 2023)
 
 Updated controller mappings for Mixxx for the Behringer CMD Studio 2a controller.
 
 Placeholder repo until I update it for merge to upstream.
 
-## New in 0.3 (July 2023)
+## New in 0.4 (Aug 2023)
 
 * Loop saving controls. (Requires Mixxx 2.4 or greater.)
 * Fader start.
 * Quantize.
+* Master volume/gain on Deck A high fx while mode-shifted.
 
 # Control scheme
 
@@ -37,6 +38,10 @@ You can also edit the jog wheel sensitivity in the preferences file if you need 
 ### Headphone Volume and Headphone Mix
 
 The headphone knob controls headphone volume/gain by default, and when mode-shifted controls the headphone mix. If you'd prefer to swap these behaviours then change the `headGainIsDefault` value to `false` in the preferences file.
+
+### Master Volume/Gain
+
+While mode-shifted, the Deck A high FX knob controls the master volume/gain.
 
 ### Vinyl Mode
 

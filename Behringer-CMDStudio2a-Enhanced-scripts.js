@@ -1,13 +1,12 @@
 // ****************************************************************************
 // * Mixxx mapping script file for the Behringer CMD Studio 2a.
 // * Author: Sam Graham, based on Rafael Ferran, Barney Garrett and Xxx previous works
-// * Version 0.3.3 (Jul 2023)
+// * Version 0.4.0 (Aug 2023)
 // * Forum: http://www.mixxx.org/forums/viewtopic.php?f=7&amp;t=7868
 // * Wiki: http://www.mixxx.org/wiki/doku.php/behringer_cmd_studio_4a
 // ****************************************************************************
 
 // TODOs:
-//   * master gain level (shift deck A high, soft-takeover)
 //   * change plusminus to only move loopin/loopout if loop button held?
 
 ////////////////////////////////////////////////////////////////////////
@@ -298,8 +297,13 @@ controller.init = function (id, debugging) {
 
     engine.softTakeover("[Master]", "headGain", true);
     engine.softTakeover("[Master]", "headMix", true);
-    engine.softTakeover("[Channel1]", "volume", true);
-    engine.softTakeover("[Channel2]", "volume", true);
+    engine.softTakeover("[Master]", "gain", true);
+    for (var channel = 1; channel <= 2; channel++) {
+        engine.softTakeover("[Channel" + channel + "]", "volume", true);
+        engine.softTakeover("[EqualizerRack1_[Channel" + channel + "]_Effect1]", "parameter1", true);
+        engine.softTakeover("[EqualizerRack1_[Channel" + channel + "]_Effect1]", "parameter2", true);
+        engine.softTakeover("[EqualizerRack1_[Channel" + channel + "]_Effect1]", "parameter3", true);
+    }
 }
 
 controller.shutdown = function () {
@@ -876,6 +880,24 @@ controller.headKnob = function (channel, control, value, status, group) {
     } else {
         engine.softTakeoverIgnoreNextValue("[Master]", "headGain");
         engine.setValue("[Master]", "headMix", script.absoluteLin(value, -1, 1, 0, 0x7f));
+    }
+}
+
+controller.fxKnob = function (channel, control, value, status, group) {
+    // Can't use deckFromGroup as these are all bound to the equalizer rack instead.
+    var deck = control <= this.controls.leftFxLow ? 1 : 2;
+    var deckName = this.deckNames[deck - 1];
+    var knob = control - this.controls[deckName + 'FxHigh'] + 1;
+    var fxParameter = 4 - knob; // low: param1, mid: param2, high: param3
+
+    if (this.modeShift && deck == 1 && knob == 1) {
+        engine.softTakeoverIgnoreNextValue(group, "parameter3");
+        engine.setValue("[Master]", "gain", script.absoluteNonLin(value, 0, 1, 5, 0, 0x7f));
+    } else {
+        if (deck == 1 && knob == 1) {
+            engine.softTakeoverIgnoreNextValue("[Master]", "gain");
+        }
+        engine.setValue(group, "parameter" + fxParameter, script.absoluteNonLin(value, 0, 1, 4, 0, 0x7f));
     }
 }
 

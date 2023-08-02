@@ -3,7 +3,7 @@
     <info>
         <name>Behringer CMD STUDIO 2a (Enhanced)</name>
         <author>Sam Graham, based on Barney Garrett, LucidityCrash, and Rafael Ferran previous works</author>
-        <description>Controller mapping for the Behringer CMD STUDIO 2a. V 0.3.3 Created Jul 2023 for Mixxx 2.4.0</description>
+        <description>Controller mapping for the Behringer CMD STUDIO 2a. V 0.4.0 Created Aug 2023 for Mixxx 2.4.0</description>
         <forums>https://www.mixxx.org/forums/viewtopic.php?f=7&amp;t=9359</forums>
         <wiki>https://www.mixxx.org/wiki/doku.php/behringer_cmd_studio_2a</wiki>
     </info>
@@ -25,62 +25,62 @@
             </control>
             <control>
                 <group>[EqualizerRack1_[Channel1]_Effect1]</group>
-                <key>parameter3</key>
+                <key>BehringerCMDStudio2a.fxKnob</key>
                 <description>High A</description>
                 <status>0xB0</status>
                 <midino>0x13</midino>
                 <options>
-                    <soft-takeover/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[EqualizerRack1_[Channel1]_Effect1]</group>
-                <key>parameter2</key>
+                <key>BehringerCMDStudio2a.fxKnob</key>
                 <description>Mid A</description>
                 <status>0xB0</status>
                 <midino>0x14</midino>
                 <options>
-                    <soft-takeover/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[EqualizerRack1_[Channel1]_Effect1]</group>
-                <key>parameter1</key>
+                <key>BehringerCMDStudio2a.fxKnob</key>
                 <description>Low A</description>
                 <status>0xB0</status>
                 <midino>0x15</midino>
                 <options>
-                    <soft-takeover/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[EqualizerRack1_[Channel2]_Effect1]</group>
-                <key>parameter3</key>
+                <key>BehringerCMDStudio2a.fxKnob</key>
                 <description>High B</description>
                 <status>0xB0</status>
                 <midino>0x43</midino>
                 <options>
-                    <soft-takeover/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[EqualizerRack1_[Channel2]_Effect1]</group>
-                <key>parameter2</key>
+                <key>BehringerCMDStudio2a.fxKnob</key>
                 <description>Mid B</description>
                 <status>0xB0</status>
                 <midino>0x44</midino>
                 <options>
-                    <soft-takeover/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
                 <group>[EqualizerRack1_[Channel2]_Effect1]</group>
-                <key>parameter1</key>
+                <key>BehringerCMDStudio2a.fxKnob</key>
                 <description>Low B</description>
                 <status>0xB0</status>
                 <midino>0x45</midino>
                 <options>
-                    <soft-takeover/>
+                    <script-binding/>
                 </options>
             </control>
             <control>
