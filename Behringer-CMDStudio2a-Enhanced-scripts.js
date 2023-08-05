@@ -388,7 +388,7 @@ controller.cycleEditMode = function (deck) {
 
 // Assign A button: cycle through edit modes: OFF/MODE1/MODE2
 controller.assignAButtonsPush = function (channel, control, value, status, group) {
-    if (value === 127) {
+    if (value === this.values.press) {
         // Button pushed
         if (this.debug) {
             this.debugLEDs();
@@ -407,8 +407,8 @@ controller.assignBButtonsPush = function (channel, control, value, status, group
     var deck = script.deckFromGroup(group);
     var buttonState = this.assignBState[deck - 1];
 
-    buttonState.pushed = (value === 127);
-    if (value === 127) { // Button pushed
+    buttonState.pushed = (value === this.values.press);
+    if (value === this.values.press) { // Button pushed
         buttonState.ignoreRelease = false;
         // set delay timer to set ignoreRelease after 500ms (configurable)
         buttonState.timer = engine.beginTimer(this.preferences.assignBOoopsTime, function () {
@@ -436,7 +436,7 @@ controller.assignBButtonsPush = function (channel, control, value, status, group
 
 // Vinyl button ON/OFF
 controller.vinylButtonPush = function (channel, control, value, status, group) {
-    if (value === 127) { // Button pushed
+    if (value === this.values.press) { // Button pushed
         if (this.modeShifted()) {
             // Toggle recording. Needed to stick this somewhere, and this is easy to remember. For me anyway.
             engine.setValue("[Recording]", "toggle_recording", 1);
@@ -451,7 +451,7 @@ controller.vinylButtonPush = function (channel, control, value, status, group) {
 
 // Mode button ON/OFF
 controller.modeButtonPush = function (channel, control, value, status, group) {
-    if (value === 127) { // Button pushed
+    if (value === this.values.press) { // Button pushed
         if (this.preferences.holdToModeShift) {
             this.setModeShift(true);
         } else if (this.modeLock) {
@@ -574,13 +574,13 @@ controller.downButtonPush = function (channel, control, value, status, group) {
 controller.minusButtonPush = function (channel, control, value, status, group) {
     var deck = script.deckFromGroup(group);
 
-    controller.minusPlusPushed[deck - 1].minus = (value === 127);
+    controller.minusPlusPushed[deck - 1].minus = (value === this.values.press);
 
     if (!this.modeShifted()) {
         // Not mode Shift
         if (this.editMode[deck - 1] === this.editModes.loop) {
             // loop mode
-            if (value === 127) {
+            if (value === this.values.press) {
                 //Button push
                 engine.setValue(group, "loop_in", 1);
             } else {
@@ -589,7 +589,7 @@ controller.minusButtonPush = function (channel, control, value, status, group) {
             }
         } else {
             // Speed (tempo) mode
-            if (value === 127) {
+            if (value === this.values.press) {
                 // Button push
                 if (controller.minusPlusPushed[deck - 1].plus) {
                     // Plus button is pushed too
@@ -606,7 +606,7 @@ controller.minusButtonPush = function (channel, control, value, status, group) {
     } else {
         // Mode Shifted
         // Beatjump backwards
-        if (value === 127) {
+        if (value === this.values.press) {
             engine.setValue(group,"beatjump_backward", 1);
         }
     }
@@ -618,13 +618,13 @@ controller.minusButtonPush = function (channel, control, value, status, group) {
 controller.plusButtonPush = function (channel, control, value, status, group) {
     var deck = script.deckFromGroup(group);
 
-    controller.minusPlusPushed[deck - 1].plus = (value === 127);
+    controller.minusPlusPushed[deck - 1].plus = (value === this.values.press);
 
     if (!this.modeShifted()) {
         // Not mode Shift
         if (this.editMode[deck - 1] === this.editModes.loop) {
             // loop mode
-            if (value === 127) {
+            if (value === this.values.press) {
                 //Button push
                 engine.setValue(group, "loop_out", 1);
             } else {
@@ -633,7 +633,7 @@ controller.plusButtonPush = function (channel, control, value, status, group) {
             }
         } else {
             // Speed (tempo) mode
-            if (value === 127) {
+            if (value === this.values.press) {
                 // Button push
                 if (controller.minusPlusPushed[deck - 1].minus) {
                     // Minus button is pushed too
@@ -650,7 +650,7 @@ controller.plusButtonPush = function (channel, control, value, status, group) {
     } else {
         // Mode Shifted
         // Beatjump backwards
-        if (value === 127) {
+        if (value === this.values.press) {
             engine.setValue(group,"beatjump_forward", 1);
         }
     }
@@ -780,7 +780,7 @@ controller.pflButtonPush = function (channel, control, value, status, group) {
 
 // Cue buttons, Mode depending
 controller.cue = function (channel, control, value, status, group) {
-    if (value === 127 && this.modeShifted()) { // Mode is ON.
+    if (value === this.values.press && this.modeShifted()) { // Mode is ON.
         engine.setValue(group, "cue_gotoandstop", 1);
     } else {
         // Mode is OFF.
@@ -903,7 +903,7 @@ controller.fxKnob = function (channel, control, value, status, group) {
 
 // Load Deck buttons. Loads to deck, or if mode-shifted clones other deck.
 controller.loadDeck = function (channel, control, value, status, group) {
-    if (value === 127) { // Button pushed
+    if (value === this.values.press) { // Button pushed
         var deck = script.deckFromGroup(group);
         if (!this.modeShifted()) {
             engine.setValue(group, "LoadSelectedTrack", 1);
