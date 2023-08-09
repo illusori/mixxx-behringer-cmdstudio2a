@@ -1,7 +1,7 @@
 // ****************************************************************************
 // * Mixxx mapping script file for the Behringer CMD Studio 2a.
 // * Author: Sam Graham, based on Rafael Ferran, Barney Garrett and Xxx previous works
-// * Version 0.4.0 (Aug 2023)
+// * Version 1.0.0 (Aug 2023)
 // * Forum: http://www.mixxx.org/forums/viewtopic.php?f=7&amp;t=7868
 // * Wiki: http://www.mixxx.org/wiki/doku.php/behringer_cmd_studio_4a
 // ****************************************************************************
@@ -300,6 +300,7 @@ controller.init = function (id, debugging) {
     engine.softTakeover("[Master]", "gain", true);
     for (var channel = 1; channel <= 2; channel++) {
         engine.softTakeover("[Channel" + channel + "]", "volume", true);
+        engine.softTakeover("[Channel" + channel + "]", "pregain", true);
         engine.softTakeover("[EqualizerRack1_[Channel" + channel + "]_Effect1]", "parameter1", true);
         engine.softTakeover("[EqualizerRack1_[Channel" + channel + "]_Effect1]", "parameter2", true);
         engine.softTakeover("[EqualizerRack1_[Channel" + channel + "]_Effect1]", "parameter3", true);
@@ -887,15 +888,23 @@ controller.fxKnob = function (channel, control, value, status, group) {
     // Can't use deckFromGroup as these are all bound to the equalizer rack instead.
     var deck = control <= this.controls.leftFxLow ? 1 : 2;
     var deckName = this.deckNames[deck - 1];
-    var knob = control - this.controls[deckName + 'FxHigh'] + 1;
+    var knob = control - this.controls[deckName + 'FxHigh'] + 1; // high: 1, mid: 2, low: 3
     var fxParameter = 4 - knob; // low: param1, mid: param2, high: param3
+    var isMasterKnob = (deck === 1 && knob === 1); // left deck high
+    var isPreGainKnob = (knob === 2); // either deck mid
 
-    if (this.modeShift && deck == 1 && knob == 1) {
+    if (this.modeShift && isMasterKnob) {
         engine.softTakeoverIgnoreNextValue(group, "parameter3");
         engine.setValue("[Master]", "gain", script.absoluteNonLin(value, 0, 1, 5, 0, 0x7f));
+    } else if (this.modeShift && isPreGainKnob) {
+        engine.softTakeoverIgnoreNextValue(group, "parameter2");
+        engine.setValue("[Channel" + deck + "]", "pregain", script.absoluteNonLin(value, 0, 1, 4, 0, 0x7f));
     } else {
-        if (deck == 1 && knob == 1) {
+        if (isMasterKnob) {
             engine.softTakeoverIgnoreNextValue("[Master]", "gain");
+        }
+        if (isPreGainKnob) {
+            engine.softTakeoverIgnoreNextValue("[Channel" + deck + "]", "pregain");
         }
         engine.setValue(group, "parameter" + fxParameter, script.absoluteNonLin(value, 0, 1, 4, 0, 0x7f));
     }
